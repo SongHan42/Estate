@@ -28,8 +28,6 @@ export class AuthController {
     const _restApiKey = 'ddc876cb236f2a4bfe7d65d8bf9fa61b'; // * 입력필요
     // 카카오 로그인 RedirectURI 등록}
     const _redirectUrl: string = process.env.CB_URI + 'kakaoLoginLogicRedirect';
-    console.log(_redirectUrl);
-
     const url = `${_hostName}/oauth/authorize?client_id=${_restApiKey}&redirect_uri=${_redirectUrl}&response_type=code`;
     return res.redirect(url);
   }
