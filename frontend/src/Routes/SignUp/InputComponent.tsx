@@ -13,7 +13,7 @@ function InputComponent({ text, check, onClick, onChange }: PropsType) {
   const checkText = () => {
     if (check === Check.start) return "중복 체크를 해주세요";
     else if (check === Check.dup) return `중복된 ${text}입니다.`;
-    else return `사용 가능한 ${text}니다.`;
+    else return `사용 가능한 ${text}입니다.`;
   };
   return (
     <div className="w-full">

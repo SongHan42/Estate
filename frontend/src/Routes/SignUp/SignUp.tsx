@@ -25,11 +25,14 @@ function SignUp() {
   };
 
   const onCheckId = async () => {
-    setCheckId(Check.dup);
-    const data = await axios.get(
-      process.env.REACT_APP_API_URL + "user/id/" + id,
-    );
-    console.log(data);
+    const data = await axios
+      .get(process.env.REACT_APP_API_URL + "user/id/" + id)
+      .then((data) => data.data);
+    if (data.isSuccess) {
+      setCheckId(Check.notDup);
+    } else {
+      setCheckId(Check.dup);
+    }
   };
 
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
