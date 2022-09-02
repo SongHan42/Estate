@@ -33,7 +33,6 @@ export class UserService {
 
   async checkDupId(user_id: string): Promise<{ isSuccess: boolean }> {
     const found: User = await this.userRepository.findOneBy({user_id});
-    console.log('hi');
     if (!found) return { isSuccess: true };
     return { isSuccess: false };
   }

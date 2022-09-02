@@ -15,7 +15,6 @@ export class UserController {
   checkDupId(
     @Param('user_id') user_id: string,
   ): Promise<{ isSuccess: boolean }> {
-    console.log(user_id);
     return this.userService.checkDupId(user_id);
   }
 
