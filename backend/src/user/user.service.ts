@@ -37,6 +37,17 @@ export class UserService {
     return { isSuccess: false };
   }
 
+  async checkDupEmail(email: string): Promise<{ isSuccess: boolean }> {
+    const found: User = await this.userRepository.findOneBy({email});
+    if (!found) return {isSuccess:true};
+    return {isSuccess:false}
+  }
+
+  async checkDupNickname(nickname: string): Promise<{ isSuccess: boolean }>{
+    const found: User = await this.userRepository.findOneBy({nickname});
+    if (!found) return {isSuccess:true};
+    return {isSuccess:false}
+  }
   async initUser(userInfoDto: UserInfoDto): Promise<any> {
     const { user_id, email, nickname } = userInfoDto;
 
