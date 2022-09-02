@@ -22,6 +22,9 @@ export class User extends BaseEntity {
   @Column()
   email: string;
 
+  @Column()
+  nickname: string;
+
   @OneToMany(
     (type) => Importance,
     (importance) => {
