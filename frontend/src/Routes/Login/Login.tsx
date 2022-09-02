@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../Components/Button";
+import { Link } from "react-router-dom";
 
 function Login() {
   return (
@@ -14,7 +15,9 @@ function Login() {
           <Button text="로그인" />
         </a>
         <a className="w-full p-2">
-          <Button text="회원가입" />
+          <Link to="/SignUp">
+            <Button text="회원가입" />
+          </Link>
         </a>
       </div>
     </div>
