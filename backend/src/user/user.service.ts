@@ -61,7 +61,7 @@ export class UserService {
     } catch (e) {
       throw e;
     }
-    await this.createUser(createUserDto);
+    return await this.createUser(createUserDto);
   }
 
   private async createUser(createUserDto: CreateUserDto) {
@@ -79,5 +79,6 @@ export class UserService {
       user.password = hashedPassword;
     } else throw new BadRequestException(`비밀번호를 입력하세요`);
     await user.save();
+    return { isSuccess: true };
   }
 }

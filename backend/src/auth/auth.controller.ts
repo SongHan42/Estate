@@ -7,7 +7,10 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post("/login")
-  logIn(@Body() user_id: string, password: string): Promise<any> {
+  logIn(
+    @Body("user_id") user_id: string,
+    @Body("password") password: string,
+  ): Promise<any> {
     // return;
     return this.authService.logIn(user_id, password);
   }

@@ -9,7 +9,7 @@ import { Repository } from "typeorm";
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
   ) {
     super({
       secretOrKey: process.env.JWT_SECRET_KEY,
