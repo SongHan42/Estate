@@ -102,7 +102,7 @@ function SignUp() {
 
   const onSignUp = () => {
     if (checkId !== Check.NOT_DUP) {
-      return alert("아이디 중복확인을 해주세요.");
+      return alert("아이디 중복 확인을 해주세요.");
     }
     if (password.length < 4) {
       return alert("비밀번호 길이가 너무 짧습니다.");
@@ -111,10 +111,10 @@ function SignUp() {
       return alert("비밀번호를 확인해주세요.");
     }
     if (checkEmail !== Check.NOT_DUP) {
-      return alert("이메일 중복확인을 해주세요.");
+      return alert("이메일 중복 확인을 해주세요.");
     }
     if (checkNickname !== Check.NOT_DUP) {
-      return alert("닉네임 중복확인을 해주세요.");
+      return alert("닉네임 중복 확인을 해주세요.");
     }
 
     axios
@@ -128,7 +128,10 @@ function SignUp() {
         navigate("/house");
       })
       .catch(() => {
-        return alert("실패!");
+        setCheckNickname(Check.START);
+        setCheckEmail(Check.START);
+        setCheckId(Check.START);
+        return alert("중복 확인을 다시 해주세요!");
       });
   };
 
