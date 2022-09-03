@@ -6,16 +6,19 @@ import {
   Param,
   ParseIntPipe,
   HttpStatus,
+  UseGuards,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { GetUserId } from "../auth/get-userId.decorator";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("user")
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthGuard())
   getUserInfo(@GetUserId() id: number): Promise<any> {
     return this.userService.getUserInfo(id);
   }

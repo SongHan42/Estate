@@ -15,7 +15,7 @@ import { ConfigModule } from "@nestjs/config";
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY, // 토큰을 생성할 때 씀
       signOptions: {
-        expiresIn: 60 * 60, //토큰의 유효시간 3600 = 1시간
+        expiresIn: 365 * 24 * 12, //토큰의 유효시간 3600 = 1시간
         // 갱신도~해야함!
       },
     }),

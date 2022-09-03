@@ -34,12 +34,9 @@ export class ImportanceService {
   }
   async getUserImportance(id: number) {
     const user: User = await this.userRepository.findOneById(id);
-    // const importance: Importance[] = await this.importanceRepository.findBy({
-    //   user,
-    // });
-    const importance: Importance = await this.importanceRepository.findOneBy({
+    const importance: Importance[] = await this.importanceRepository.findBy({
       user,
     });
-    // return importance;
+    return importance;
   }
 }
