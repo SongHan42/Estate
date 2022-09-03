@@ -22,6 +22,7 @@ import { ConfigModule } from "@nestjs/config";
     TypeOrmModule.forFeature([User]),
   ],
   providers: [AuthService, JwtStrategy],
-  controllers: [JwtStrategy, AuthController],
+  controllers: [AuthController],
+  exports: [JwtModule, PassportModule],
 })
 export class AuthModule {}

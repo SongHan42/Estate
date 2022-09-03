@@ -8,7 +8,7 @@ export class AuthController {
 
   @Post("/login")
   logIn(@Body() user_id: string, password: string): Promise<any> {
-    return;
-    // return this.authService.logIn(user_id, password);
+    // return;
+    return this.authService.logIn(user_id, password);
   }
 }
