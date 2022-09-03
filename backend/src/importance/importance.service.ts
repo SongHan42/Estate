@@ -1,4 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class ImportanceService {}
+export class ImportanceService {
+  // async initUserImportance(id: number) {}
+  // async getUserImportance(id: number) {}
+}

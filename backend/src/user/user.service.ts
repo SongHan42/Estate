@@ -1,8 +1,8 @@
 import {
   Injectable,
   BadRequestException,
-  ForbiddenException,
   NotFoundException,
+  ConflictException,
 } from "@nestjs/common";
 import { User } from "./user.entity";
 import * as bcrypt from "bcryptjs";
@@ -48,7 +48,7 @@ export class UserService {
       found = await this.userRepository.findOne({ where: { nickname: arg } });
 
     if (!found) return { isSuccess: true };
-    throw new ForbiddenException(`중복 존재`); //이게 맞을까?
+    throw new ConflictException(`중복 존재`); //이게 맞을까?
   }
 
   async initUser(createUserDto: CreateUserDto): Promise<any> {

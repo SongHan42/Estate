@@ -27,10 +27,7 @@ export class UserController {
 
   @Get("/id/:user_id")
   checkDupId(
-    @Param(
-      "user_id",
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
+    @Param("user_id")
     user_id: string,
   ): Promise<{ isSuccess: boolean }> {
     return this.userService.checkDupUserInfo("user_id", user_id);
@@ -38,10 +35,7 @@ export class UserController {
 
   @Get("/email/:email")
   checkDupEmail(
-    @Param(
-      "email",
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
+    @Param("email")
     email: string,
   ): Promise<{ isSuccess: boolean }> {
     return this.userService.checkDupUserInfo("email", email);
@@ -49,10 +43,7 @@ export class UserController {
 
   @Get("/nickname/:nickname")
   checkDupNickname(
-    @Param(
-      "nickname",
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
+    @Param("nickname")
     nickname: string,
   ): Promise<{ isSuccess: boolean }> {
     return this.userService.checkDupUserInfo("nickname", nickname);
