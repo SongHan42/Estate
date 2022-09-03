@@ -7,6 +7,8 @@ import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./jwt.strategy";
 import { ConfigModule } from "@nestjs/config";
+import { ImportanceService } from "src/importance/importance.service";
+import { Importance } from "src/importance/importance.entity";
 
 @Module({
   imports: [

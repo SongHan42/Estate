@@ -8,6 +8,7 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
+import { ImportanceService } from "src/importance/importance.service";
 
 @Injectable()
 export class AuthService {

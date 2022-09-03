@@ -10,12 +10,14 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserInfoDto } from "./dto/user-info.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
+import { ImportanceService } from "src/importance/importance.service";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private importanceService: ImportanceService,
   ) {}
 
   async getUserInfo(id: number): Promise<any> {
@@ -78,7 +80,11 @@ export class UserService {
       const hashedPassword = await bcrypt.hash(password, salt);
       user.password = hashedPassword;
     } else throw new BadRequestException(`비밀번호를 입력하세요`);
+
     await user.save();
+
+    await this.importanceService.createDefaultImportance(user.id);
+
     return { isSuccess: true };
   }
 }
