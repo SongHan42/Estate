@@ -1,20 +1,71 @@
-import { Injectable } from '@nestjs/common';
-import { UserInfoDto } from './user-info.dto';
-import { User } from './user.entity';
-import * as bcrypt from 'bcryptjs';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {
+  Injectable,
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from "@nestjs/common";
+import { User } from "./user.entity";
+import * as bcrypt from "bcryptjs";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { UserInfoDto } from "./dto/user-info.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
 
 @Injectable()
 export class UserService {
-    constructor(@InjectRepository(User)
-    private readonly userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
   async getUserInfo(id: number): Promise<any> {
-    // const user: User = await this.userRepository.findOne(id);
+    const user: User = await this.userRepository.findOneById(id);
+    if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
+    const userInfoDto: UserInfoDto = {
+      user_id: user.user_id,
+      nickname: user.nickname,
+      email: user.email,
+    };
+
+    return userInfoDto;
   }
-  private async createUser(userInfoDto: UserInfoDto) {
-    const { user_id, password, email, nickname } = userInfoDto;
+
+  async checkDupUserInfo(
+    type: string,
+    arg: string,
+  ): Promise<{ isSuccess: boolean }> {
+    if (arg === "") throw new BadRequestException(`빈 문자열 존재`);
+
+    let found: User;
+
+    if (type === "user_id")
+      found = await this.userRepository.findOne({
+        where: { user_id: arg },
+      });
+    else if (type === "email")
+      found = await this.userRepository.findOne({ where: { email: arg } });
+    else if (type === "nickname")
+      found = await this.userRepository.findOne({ where: { nickname: arg } });
+
+    if (!found) return { isSuccess: true };
+    throw new ForbiddenException(`중복 존재`); //이게 맞을까?
+  }
+
+  async initUser(createUserDto: CreateUserDto): Promise<any> {
+    const { user_id, email, nickname } = createUserDto;
+
+    try {
+      await this.checkDupUserInfo("user_id", user_id);
+      await this.checkDupUserInfo("email", email);
+      await this.checkDupUserInfo("nickname", nickname);
+    } catch (e) {
+      throw e;
+    }
+    await this.createUser(createUserDto);
+  }
+
+  private async createUser(createUserDto: CreateUserDto) {
+    const { user_id, password, email, nickname } = createUserDto;
 
     const user: User = this.userRepository.create({
       user_id,
@@ -22,38 +73,11 @@ export class UserService {
       nickname,
     });
 
-    if (password != '') {
+    if (password != "") {
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(password, salt);
       user.password = hashedPassword;
-    }
-
+    } else throw new BadRequestException(`비밀번호를 입력하세요`);
     await user.save();
   }
-
-  async checkDupId(user_id: string): Promise<{ isSuccess: boolean }> {
-    const found: User = await this.userRepository.findOneBy({user_id});
-    if (!found) return { isSuccess: true };
-    return { isSuccess: false };
-  }
-
-  async checkDupEmail(email: string): Promise<{ isSuccess: boolean }> {
-    const found: User = await this.userRepository.findOneBy({email});
-    if (!found) return {isSuccess:true};
-    return {isSuccess:false}
-  }
-
-  async checkDupNickname(nickname: string): Promise<{ isSuccess: boolean }>{
-    const found: User = await this.userRepository.findOneBy({nickname});
-    if (!found) return {isSuccess:true};
-    return {isSuccess:false}
-  }
-  async initUser(userInfoDto: UserInfoDto): Promise<any> {
-    const { user_id, email, nickname } = userInfoDto;
-
-    // 아이디, 이메일, 닉네임 중복 확인 한번 더 하기
-
-    await this.createUser(userInfoDto);
-  }
-
 }

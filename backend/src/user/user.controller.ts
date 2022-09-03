@@ -1,34 +1,65 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserInfoDto } from './user-info.dto';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  ParseIntPipe,
+  HttpStatus,
+} from "@nestjs/common";
+import { UserService } from "./user.service";
+import { CreateUserDto } from "./dto/create-user.dto";
 
-@Controller('user')
+@Controller("user")
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('/:id') //미완 유저정보 반환
-  async getUserInfo(@Param('id') id: number): Promise<any> {
+  @Get("/:id")
+  getUserInfo(
+    @Param(
+      "id",
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: number,
+  ): Promise<any> {
     return this.userService.getUserInfo(id);
   }
 
-  @Get('/id/:user_id')
+  @Get("/id/:user_id")
   checkDupId(
-    @Param('user_id') user_id: string,
+    @Param(
+      "user_id",
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    user_id: string,
   ): Promise<{ isSuccess: boolean }> {
-    return this.userService.checkDupId(user_id);
+    return this.userService.checkDupUserInfo("user_id", user_id);
   }
 
-  @Get('/email/:email')
-  checkDupEmail(@Param('email') email: string): Promise<{ isSuccess: boolean }> {
-    return this.userService.checkDupEmail(email);
+  @Get("/email/:email")
+  checkDupEmail(
+    @Param(
+      "email",
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    email: string,
+  ): Promise<{ isSuccess: boolean }> {
+    return this.userService.checkDupUserInfo("email", email);
   }
 
-  @Get('/nickname/:nickname')
-  checkDupNickname(@Param('nickname') nickname: string):Promise<{ isSuccess: boolean }>{
-    return this.userService.checkDupNickname(nickname);
+  @Get("/nickname/:nickname")
+  checkDupNickname(
+    @Param(
+      "nickname",
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    nickname: string,
+  ): Promise<{ isSuccess: boolean }> {
+    return this.userService.checkDupUserInfo("nickname", nickname);
   }
+
   @Post()
-  async initUser(@Body() userInfoDto: UserInfoDto): Promise<any> {
-    return this.userService.initUser(userInfoDto);
+  async initUser(@Body() createUserDto: CreateUserDto): Promise<any> {
+    return this.userService.initUser(createUserDto);
   }
 }
