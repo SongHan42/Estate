@@ -3,6 +3,7 @@ import InputComponent from "./InputComponent";
 import axios from "axios";
 import InputPassword from "./InputPassword";
 import Button from "../../Components/Button";
+import { useNavigate } from "react-router";
 
 export enum Check {
   start,
@@ -19,6 +20,7 @@ function SignUp() {
   const [checkEmail, setCheckEmail] = useState<Check>(Check.start);
   const [nickname, setNickname] = useState("");
   const [checkNickname, setCheckNickname] = useState<Check>(Check.start);
+  const navigate = useNavigate();
 
   const onChangeId = (e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
@@ -44,6 +46,9 @@ function SignUp() {
   };
 
   const passowrdCheckText = () => {
+    if (password.length < 4) {
+      return "비밀번호가 너무 짧습니다.";
+    }
     if (password !== checkPassword) {
       return "비밀번호가 일치하지 않습니다.";
     }
@@ -74,8 +79,28 @@ function SignUp() {
     console.log(data);
   };
 
+  const onSignUp = () => {
+    if (checkId !== Check.notDup) {
+      return alert("아이디 중복확인을 해주세요.");
+    }
+    if (password.length < 4) {
+      return alert("비밀번호 길이가 너무 짧습니다.");
+    }
+    if (password !== checkPassword) {
+      return alert("비밀번호를 확인해주세요.");
+    }
+    if (checkEmail !== Check.notDup) {
+      return alert("이메일 중복확인을 해주세요.");
+    }
+    if (checkNickname !== Check.notDup) {
+      return alert("닉네임 중복확인을 해주세요.");
+    }
+
+    navigate("/house");
+  };
+
   return (
-    <div className="flex flex-col justify-center items-center w-full h-full">
+    <div>
       <h1 className="text-4xl pb-4">회원가입</h1>
 
       <InputComponent
@@ -99,7 +124,7 @@ function SignUp() {
         onChange={onChangeNickname}
         check={checkNickname}
       />
-      <Button text={"회원가입"} />
+      <Button text={"회원가입"} onClick={onSignUp} />
     </div>
   );
 }

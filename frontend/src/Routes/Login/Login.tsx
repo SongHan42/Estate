@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Login() {
   return (
-    <div className="flex flex-col justify-center items-center w-full h-full">
+    <div>
       <h1 className="h-40 text-4xl">부동산 체크리스트</h1>
       <div className="w-full p-2">아이디</div>
       <input className="w-full p-2"></input>
