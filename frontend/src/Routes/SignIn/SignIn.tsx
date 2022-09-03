@@ -23,8 +23,8 @@ function SignIn() {
     if (password.length === 0) return setText("비밀번호를 입력해주세요");
 
     axios
-      .post(process.env.REACT_APP_API_URL + "", {
-        id,
+      .post(process.env.REACT_APP_API_URL + "auth/login", {
+        user_id: id,
         password,
       })
       .then((res) => {
