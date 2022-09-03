@@ -11,7 +11,6 @@ export class AuthController {
     @Body("user_id") user_id: string,
     @Body("password") password: string,
   ): Promise<any> {
-    // return;
     return this.authService.logIn(user_id, password);
   }
 }

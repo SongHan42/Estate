@@ -15,7 +15,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private userRepository: Repository<User>,
   ) {}
 
   async getUserInfo(id: number): Promise<any> {

@@ -9,19 +9,14 @@ import {
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
+import { GetUserId } from "../auth/get-userId.decorator";
 
 @Controller("user")
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get("/:id")
-  getUserInfo(
-    @Param(
-      "id",
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    id: number,
-  ): Promise<any> {
+  @Get()
+  getUserInfo(@GetUserId() id: number): Promise<any> {
     return this.userService.getUserInfo(id);
   }
 

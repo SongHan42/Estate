@@ -5,10 +5,10 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-} from 'typeorm';
-import { HouseType } from './house-type.enum';
-import { User } from 'src/user/user.entity';
-import { Grade } from 'src/grade/grade.entity';
+} from "typeorm";
+import { HouseType } from "./house-type.enum";
+import { User } from "src/user/user.entity";
+import { Grade } from "src/grade/grade.entity";
 
 @Entity()
 export class House extends BaseEntity {
@@ -36,9 +36,9 @@ export class House extends BaseEntity {
   @Column()
   maintenance_fee: number;
 
-  @OneToMany((type) => Grade, (grade) => grade.house)
+  @OneToMany((type) => Grade, (grade) => grade.house, { onDelete: "CASCADE" })
   grade: Grade[];
 
-  @ManyToOne((type) => User, (user) => user.house)
+  @ManyToOne((type) => User, (user) => user.house, { onDelete: "CASCADE" })
   user: User;
 }
