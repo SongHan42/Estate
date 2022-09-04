@@ -53,7 +53,7 @@ export class ImportanceService {
   }
 
   //실험 필요 (성공 응답 본문 수정)
-  async initUserImportance(id: number, importance: ImportanceDto) {
+  async postUserImportance(id: number, importance: ImportanceDto) {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     if (importance.title === "")
@@ -86,6 +86,7 @@ export class ImportanceService {
 
     find.rating = importance.rating;
     await find.save();
+    //유저 중요도 정렬 새로하기!
     return { isSuccess: true };
   }
 }

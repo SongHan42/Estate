@@ -16,11 +16,11 @@ export class ImportanceController {
 
   @Post()
   @UseGuards(AuthGuard())
-  initUserImportance(
+  postUserImportance(
     @GetUserId() id: number,
     @Body() importance: ImportanceDto,
   ): Promise<any> {
-    return this.importanceService.initUserImportance(id, importance);
+    return this.importanceService.postUserImportance(id, importance);
   }
 
   @Patch()

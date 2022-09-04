@@ -21,19 +21,19 @@ export class House extends BaseEntity {
   @Column()
   type: HouseType;
 
-  @Column()
+  @Column({ default: 0 })
   area: number;
 
-  @Column()
+  @Column({ default: 0 })
   price: number;
 
-  @Column()
+  @Column({ default: 0 })
   deposit: number;
 
-  @Column()
+  @Column({ default: 0 })
   rent: number;
 
-  @Column()
+  @Column({ default: 0 })
   maintenance_fee: number;
 
   @OneToMany((type) => Grade, (grade) => grade.house, { onDelete: "CASCADE" })

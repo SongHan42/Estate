@@ -4,9 +4,8 @@ import {
   Column,
   Entity,
   ManyToOne,
-} from 'typeorm';
-import { User } from 'src/user/user.entity';
-import { House } from 'src/house/house.entity';
+} from "typeorm";
+import { House } from "src/house/house.entity";
 
 @Entity()
 export class Grade extends BaseEntity {
@@ -16,7 +15,7 @@ export class Grade extends BaseEntity {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ default: 0 })
   star: number;
 
   @Column()
