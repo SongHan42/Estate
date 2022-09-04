@@ -18,7 +18,7 @@ export class Grade extends BaseEntity {
   @Column({ default: 0 })
   star: number;
 
-  @Column()
+  @Column({ default: "" })
   memo: string;
 
   @ManyToOne((type) => House, (house) => house.grade)

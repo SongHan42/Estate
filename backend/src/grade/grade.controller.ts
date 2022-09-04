@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { Grade } from "./grade.entity";
+import { GradeDto } from "./grade.dto";
 import { GradeService } from "./grade.service";
 
 @Controller("grade")
@@ -9,9 +9,9 @@ export class GradeController {
   //   @Post()
   //   postHouseGrade(
   //     @Body("house_id") house_id: number,
-  //     @Body("grades") grades: Grade[],
+  //     @Body("grades") gradeDto: GradeDto,
   //   ) {
-  //     // return await this.gradeService.postHouseGrade(house_id, grades);
+  //     return this.gradeService.postHouseGrade(house_id, gradeDto);
   //     //grades ck need!
   //   }
 }
