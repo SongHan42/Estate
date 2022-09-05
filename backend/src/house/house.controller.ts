@@ -9,10 +9,10 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { HouseService } from "./house.service";
-import { HouseListDto } from "./house-list.dto";
+import { HouseListDto } from "./dto/house-list.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { GetUserId } from "src/auth/get-userId.decorator";
-import { HouseDto } from "./house.dto";
+import { HouseDto } from "./dto/house.dto";
 import { House } from "./house.entity";
 
 @Controller("house")
@@ -39,7 +39,7 @@ export class HouseController {
   postUserHouse(
     @GetUserId() id: number,
     @Body() HouseDto: HouseDto,
-  ): Promise<any> {
+  ): Promise<HouseDto> {
     return this.houseService.postUserHouse(id, HouseDto);
   }
 
@@ -49,7 +49,7 @@ export class HouseController {
     @GetUserId() id: number,
     @Param("house_id", ParseIntPipe) house_id: number,
     @Body() houseDto: HouseDto,
-  ): Promise<{ isSuccess: true }> {
+  ): Promise<HouseDto> {
     return this.houseService.editUserHouse(id, house_id, houseDto);
   }
 }

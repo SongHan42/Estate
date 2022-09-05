@@ -1,5 +1,5 @@
-import { Grade } from "src/grade/grade.entity";
-import { HouseType } from "./house-type.enum";
+import { GradeDto } from "src/grade/grade.dto";
+import { HouseType } from "../house-type.enum";
 
 export class HouseDto {
   title: string;
@@ -9,5 +9,5 @@ export class HouseDto {
   deposit: number;
   rent: number;
   maintenance_fee: number;
-  grade: Grade[]; //테스트필요
+  gradeDto: GradeDto[]; //테스트필요
 }

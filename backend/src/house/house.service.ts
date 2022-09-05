@@ -1,12 +1,16 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { House } from "./house.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { HouseListDto } from "./house-list.dto";
+import { HouseListDto } from "./dto/house-list.dto";
 import { User } from "src/user/user.entity";
-import { HouseDto } from "./house.dto";
+import { HouseDto } from "./dto/house.dto";
 import { GradeService } from "src/grade/grade.service";
-import { number } from "joi";
+import { Grade } from "src/grade/grade.entity";
 
 @Injectable()
 export class HouseService {
@@ -15,6 +19,8 @@ export class HouseService {
     private houseRepository: Repository<House>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Grade)
+    private gradeRepository: Repository<Grade>,
     private gradeService: GradeService,
   ) {}
 
@@ -47,37 +53,55 @@ export class HouseService {
   }
 
   //새로운 집 만들기!
-  async postUserHouse(id: number, HouseDto: HouseDto): Promise<any> {
+  async postUserHouse(id: number, houseDto: HouseDto): Promise<any> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-    //title,type 비지 않는지 확인해야함!
+    if (houseDto.title === "") throw new BadRequestException(`title need!`);
+    // type 안들어올 때 Null 맞는지 확인
+    if (houseDto.type === null) throw new BadRequestException(`type need!`);
+
     const house: House = this.houseRepository.create({
-      title: HouseDto.title,
-      type: HouseDto.type,
-      area: HouseDto.area,
-      price: HouseDto.price,
-      deposit: HouseDto.deposit,
-      rent: HouseDto.rent,
-      maintenance_fee: HouseDto.maintenance_fee,
-      // grade: HouseDto.grade, //잘 들어가는지 확인 dto로 안빼도 괜찮은가?
+      title: houseDto.title,
+      type: houseDto.type,
+      area: houseDto.area,
+      price: houseDto.price,
+      deposit: houseDto.deposit,
+      rent: houseDto.rent,
+      maintenance_fee: houseDto.maintenance_fee,
+      user,
     });
     await house.save();
 
     this.gradeService.createDefaultGrade(id, house);
 
-    return { isSuccess: true };
+    return houseDto;
   }
 
   async editUserHouse(
     id: number,
     house_id: number,
     houseDto: HouseDto,
-  ): Promise<{ isSuccess: true }> {
+  ): Promise<HouseDto> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     const house: House = await this.houseRepository.findOneById(house_id);
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
-    //title,type 비지 않는지 확인해야함!
+    if (houseDto.title === "") throw new BadRequestException(`title need!`);
+    // type 안들어올 때 Null 맞는지 확인
+    if (houseDto.type === null) throw new BadRequestException(`type need!`);
+
+    for await (const gradeDto of houseDto.gradeDto) {
+      const find: Grade = await this.gradeRepository.findOneById(gradeDto.id);
+      if (find) {
+        find.title = gradeDto.title;
+        find.star = gradeDto.star;
+        find.memo = gradeDto.memo;
+        await find.save();
+      }
+    }
+    const pushGrade: Grade[] = await this.gradeRepository.findBy({
+      house: { id: house.id },
+    });
 
     house.title = houseDto.title;
     house.type = houseDto.type;
@@ -86,10 +110,9 @@ export class HouseService {
     house.deposit = houseDto.deposit;
     house.rent = houseDto.rent;
     house.maintenance_fee = houseDto.maintenance_fee;
-    //grade 여기서 변경??
-    house.grade = houseDto.grade;
-
+    house.grade = pushGrade;
     house.save();
-    return { isSuccess: true };
+
+    return houseDto;
   }
 }

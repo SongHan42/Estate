@@ -2,9 +2,9 @@ import { Controller, Get, Post, UseGuards, Body, Patch } from "@nestjs/common";
 import { ImportanceService } from "./importance.service";
 import { GetUserId } from "../auth/get-userId.decorator";
 import { AuthGuard } from "@nestjs/passport";
-import { ImportanceDto } from "./importance.dto";
+import { ImportanceDto } from "./dto/importance.dto";
 import { Importance } from "./importance.entity";
-import { ReturnImportanceDto } from "./return-importance.dto";
+import { ReturnImportanceDto } from "./dto/return-importance.dto";
 
 @Controller("importance")
 export class ImportanceController {

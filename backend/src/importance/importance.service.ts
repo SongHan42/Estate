@@ -7,8 +7,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Importance } from "./importance.entity";
 import { Repository } from "typeorm";
 import { User } from "src/user/user.entity";
-import { ImportanceDto } from "./importance.dto";
-import { ReturnImportanceDto } from "./return-importance.dto";
+import { ImportanceDto } from "./dto/importance.dto";
+import { ReturnImportanceDto } from "./dto/return-importance.dto";
 
 @Injectable()
 export class ImportanceService {

@@ -1,5 +1,5 @@
-import { HouseType } from "./house-type.enum";
-import { House } from "./house.entity";
+import { HouseType } from "../house-type.enum";
+import { House } from "../house.entity";
 
 export class HouseListDto {
   constructor(house: House) {

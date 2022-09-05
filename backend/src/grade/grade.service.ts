@@ -4,7 +4,6 @@ import { House } from "src/house/house.entity";
 import { Importance } from "src/importance/importance.entity";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
-import { GradeDto } from "./grade.dto";
 import { Grade } from "./grade.entity";
 
 @Injectable()
@@ -29,7 +28,7 @@ export class GradeService {
         id: user.id,
       },
     });
-
+    //순서에 맞게!
     for await (const importance of importances) {
       const grade: Grade = this.gradeRepository.create({
         title: importance.title,
@@ -38,9 +37,4 @@ export class GradeService {
       await grade.save();
     }
   }
-
-  //   async postHouseGrade(house_id: number, gradeDto: GradeDto): Promise<any> {
-  //     const house: House = await this.houseRepository.findOneById(house_id);
-  //     if (!house) throw new NotFoundException(`집 없음`);
-  //   }
 }
