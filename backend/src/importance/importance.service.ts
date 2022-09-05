@@ -8,6 +8,7 @@ import { Importance } from "./importance.entity";
 import { Repository } from "typeorm";
 import { User } from "src/user/user.entity";
 import { ImportanceDto } from "./importance.dto";
+import { ReturnImportanceDto } from "./return-importance.dto";
 
 @Injectable()
 export class ImportanceService {
@@ -27,11 +28,6 @@ export class ImportanceService {
         id: user.id,
       },
     });
-
-    // const importancedto: ImportanceDto[] = [];
-    // importances.forEach((importance) => {
-    //   importancedto.push(new ImportanceDto(importance));
-    // });
 
     return importance;
   }
@@ -53,17 +49,21 @@ export class ImportanceService {
   }
 
   //실험 필요 (성공 응답 본문 수정)
-  async editUserImportance(id: number, importanceDtoList: ImportanceDto[]) {
+  async editUserImportance(
+    id: number,
+    importanceDtoList: ImportanceDto[],
+  ): Promise<ReturnImportanceDto[]> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
 
+    const returnImportanceDto: ReturnImportanceDto[] = [];
     for await (const importanceDto of importanceDtoList) {
       let importance: Importance;
       if (importanceDto.id === 0) {
         importance = this.importanceRepository.create({
           title: importanceDto.title,
           rating: importanceDto.rating,
-          user: user.id,
+          user,
         });
       } else {
         importance = await this.importanceRepository.findOneById(
@@ -74,29 +74,9 @@ export class ImportanceService {
         importance.rating = importanceDto.rating;
       }
       await importance.save();
+      returnImportanceDto.push(new ReturnImportanceDto(importance));
     }
 
-    return { isSuccess: true };
+    return returnImportanceDto;
   }
-
-  // async editUserImportance(id: number, importance: ImportanceDto) {
-  //   const user: User = await this.userRepository.findOneById(id);
-  //   if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-  //   if (importance.title === "")
-  //     throw new BadRequestException(`title을 설정해 주세요`);
-
-  //   const find: Importance = await this.importanceRepository.findOneBy({
-  //     user: {
-  //       id: user.id,
-  //     },
-  //     title: importance.title,
-  //   });
-
-  //   if (!find) throw new BadRequestException(`수정할 importance를 찾지 못함`);
-
-  //   find.rating = importance.rating;
-  //   await find.save();
-  //   //유저 중요도 정렬 새로하기!
-  //   return { isSuccess: true };
-  // }
 }
