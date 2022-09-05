@@ -3,6 +3,7 @@ import { ImportanceService } from "./importance.service";
 import { GetUserId } from "../auth/get-userId.decorator";
 import { AuthGuard } from "@nestjs/passport";
 import { ImportanceDto } from "./importance.dto";
+import { Importance } from "./importance.entity";
 
 @Controller("importance")
 export class ImportanceController {
@@ -10,7 +11,7 @@ export class ImportanceController {
 
   @Get()
   @UseGuards(AuthGuard())
-  getUserImportance(@GetUserId() id: number): Promise<ImportanceDto[]> {
+  getUserImportance(@GetUserId() id: number): Promise<Importance[]> {
     return this.importanceService.getUserImportance(id);
   }
 
@@ -18,9 +19,9 @@ export class ImportanceController {
   @UseGuards(AuthGuard())
   postUserImportance(
     @GetUserId() id: number,
-    @Body() importance: ImportanceDto,
+    @Body() importanceDtoList: ImportanceDto[],
   ): Promise<any> {
-    return this.importanceService.postUserImportance(id, importance);
+    return this.importanceService.postUserImportance(id, importanceDtoList);
   }
 
   @Patch()
