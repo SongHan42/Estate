@@ -18,9 +18,9 @@ export class ImportanceController {
 
   @Patch()
   @UseGuards(AuthGuard())
-  postUserImportance(
+  editUserImportance(
     @GetUserId() id: number,
-    @Body() importanceDtoList: ImportanceDto[],
+    @Body("importances") importanceDtoList: ImportanceDto[],
   ): Promise<ReturnImportanceDto[]> {
     return this.importanceService.editUserImportance(id, importanceDtoList);
   }

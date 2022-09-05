@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Importance } from "./importance.entity";
 import { Repository } from "typeorm";
@@ -47,8 +43,7 @@ export class ImportanceService {
       await importance.save();
     }
   }
-
-  //실험 필요 (성공 응답 본문 수정)
+  //정렬에 맞게 하기!!
   async editUserImportance(
     id: number,
     importanceDtoList: ImportanceDto[],
@@ -59,24 +54,27 @@ export class ImportanceService {
     const returnImportanceDto: ReturnImportanceDto[] = [];
     for await (const importanceDto of importanceDtoList) {
       let importance: Importance;
-      if (importanceDto.id === 0) {
+      if (importanceDto.id === null) {
+        //0으로 못보내줄듯? 수요일날 이야기
         importance = this.importanceRepository.create({
           title: importanceDto.title,
           rating: importanceDto.rating,
           user,
         });
       } else {
-        importance = await this.importanceRepository.findOneById(
-          importanceDto.id,
-        );
+        importance = await this.importanceRepository.findOne({
+          where: { id: importanceDto.id },
+          relations: ["user"],
+        });
         if (!importance) throw new NotFoundException();
         importance.title = importanceDto.title;
         importance.rating = importanceDto.rating;
       }
       await importance.save();
+      //정렬
       returnImportanceDto.push(new ReturnImportanceDto(importance));
     }
-
+    // 정렬해서 보내주기
     return returnImportanceDto;
   }
 }

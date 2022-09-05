@@ -15,8 +15,6 @@ export class GradeService {
     private importanceRepository: Repository<Importance>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(House)
-    private houseRepository: Repository<House>,
   ) {}
 
   async createDefaultGrade(userId: number, house: House) {
