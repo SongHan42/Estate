@@ -102,7 +102,6 @@ export class HouseService {
     const pushGrade: Grade[] = await this.gradeRepository.findBy({
       house: { id: house.id },
     });
-
     house.title = houseDto.title;
     house.type = houseDto.type;
     house.area = houseDto.area;

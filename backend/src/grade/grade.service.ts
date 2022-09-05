@@ -26,7 +26,7 @@ export class GradeService {
         id: user.id,
       },
     });
-    //순서에 맞게!
+    importances.sort((a, b) => a.rating - b.rating);
     for await (const importance of importances) {
       const grade: Grade = this.gradeRepository.create({
         title: importance.title,

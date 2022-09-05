@@ -71,11 +71,9 @@ export class ImportanceService {
         importance.rating = importanceDto.rating;
       }
       await importance.save();
-      //정렬
       returnImportanceDto.push(new ReturnImportanceDto(importance));
     }
     returnImportanceDto.sort((a, b) => a.rating - b.rating);
-    // 정렬해서 보내주기
     return returnImportanceDto;
   }
 }
