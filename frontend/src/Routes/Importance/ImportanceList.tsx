@@ -27,9 +27,9 @@ function ImportanceList() {
   }, []);
 
   const onClick = () => {
-    axios.post(
+    axios.patch(
       process.env.REACT_APP_API_URL + "importance",
-      importances,
+      { importances: importances },
       getConfig(),
     );
   };
