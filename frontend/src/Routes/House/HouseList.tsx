@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import HouseComponent from "./HouseComponent";
 import axios from "axios";
 import { getConfig } from "../../function/getConfig";
+import Button from "../../Components/Button";
+import { Link } from "react-router-dom";
 
 export enum HouseEnum {
   DEALING,
@@ -12,7 +14,7 @@ export enum HouseEnum {
 export type HouseType = {
   id: number;
   title: string;
-  houseType: HouseEnum;
+  type: HouseEnum;
   area: number;
   price: number;
   deposit: number;
@@ -21,12 +23,11 @@ export type HouseType = {
 };
 
 function HouseList() {
-  const [houses, setHouses] = useState<HouseType[]>();
+  const [houses, setHouses] = useState<HouseType[]>([]);
   useEffect(() => {
     axios
       .get(process.env.REACT_APP_API_URL + "house", getConfig())
       .then((res) => {
-        console.log(res);
         setHouses(res.data);
       })
       .catch();
@@ -35,11 +36,15 @@ function HouseList() {
   return (
     <div className="w-full">
       <h1 className="text-4xl text-center">리스트</h1>
-      {houses
-        ? houses.map((house) => {
-            <HouseComponent house={house} />;
-          })
-        : null}
+      {houses.map((house) => {
+        return <HouseComponent key="0" house={house} />;
+      })}
+      <Link to="/importance">
+        <Button text="중요도 수정" />
+      </Link>
+      <Link to="/house/0">
+        <Button text="추가" />
+      </Link>
     </div>
   );
 }
