@@ -4,6 +4,7 @@ import axios from "axios";
 import { getConfig } from "../../function/getConfig";
 import Button from "../../Components/Button";
 import { Link } from "react-router-dom";
+import Header from "../../Components/Header";
 
 export enum HouseEnum {
   DEALING,
@@ -35,15 +36,15 @@ function HouseList() {
 
   return (
     <div className="w-full">
+      <Header />
       <h1 className="text-4xl text-center">리스트</h1>
       {houses.map((house) => {
-        return <HouseComponent key="0" house={house} />;
+        return (
+          <HouseComponent key={house.id} house={house} setHouses={setHouses} />
+        );
       })}
-      <Link to="/importance">
-        <Button text="중요도 수정" />
-      </Link>
       <Link to="/house/0">
-        <Button text="추가" />
+        <Button style="fixed bottom-0 left-0" text="추가" />
       </Link>
     </div>
   );
