@@ -90,7 +90,7 @@ export class HouseService {
     if (houseDto.title === "") throw new BadRequestException(`title need!`);
     if (houseDto.type === null) throw new BadRequestException(`type need!`);
 
-    for await (const gradeDto of houseDto.gradeDto) {
+    for await (const gradeDto of houseDto.grade) {
       const find: Grade = await this.gradeRepository.findOneById(gradeDto.id);
       if (find) {
         find.title = gradeDto.title;
