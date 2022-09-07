@@ -17,7 +17,7 @@ export class User extends BaseEntity {
   firstLogin: boolean;
 
   @Column()
-  user_id: string;
+  userId: string;
 
   @Column()
   password: string;
@@ -44,5 +44,3 @@ export class User extends BaseEntity {
   )
   house: House[];
 }
-
-//로그인 하고 -> firstLogin : true로 바꿔주고 , 디폴트 임폴턴스 생성해주기!

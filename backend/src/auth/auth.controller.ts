@@ -7,9 +7,9 @@ export class AuthController {
 
   @Post("/login")
   logIn(
-    @Body("user_id") user_id: string,
+    @Body("userId") userId: string,
     @Body("password") password: string,
   ): Promise<any> {
-    return this.authService.logIn(user_id, password);
+    return this.authService.logIn(userId, password);
   }
 }

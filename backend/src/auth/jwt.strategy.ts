@@ -18,8 +18,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload) {
-    const { user_id } = payload;
-    const user: User = await this.userRepository.findOneBy({ user_id });
+    const { userId } = payload;
+    const user: User = await this.userRepository.findOneBy({ userId });
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     return user;
   }

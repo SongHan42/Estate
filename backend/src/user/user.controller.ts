@@ -25,10 +25,10 @@ export class UserController {
 
   @Get("/id/:user_id")
   checkDupId(
-    @Param("user_id")
-    user_id: string,
+    @Param("userId")
+    userId: string,
   ): Promise<{ isSuccess: boolean }> {
-    return this.userService.checkDupUserInfo("user_id", user_id);
+    return this.userService.checkDupUserInfo("userId", userId);
   }
 
   @Get("/email/:email")

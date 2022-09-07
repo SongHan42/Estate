@@ -24,7 +24,7 @@ export class UserService {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     const userInfoDto: UserInfoDto = {
-      user_id: user.user_id,
+      userId: user.userId,
       nickname: user.nickname,
       email: user.email,
     };
@@ -40,9 +40,9 @@ export class UserService {
 
     let found: User;
 
-    if (type === "user_id")
+    if (type === "userId")
       found = await this.userRepository.findOne({
-        where: { user_id: arg },
+        where: { userId: arg },
       });
     else if (type === "email")
       found = await this.userRepository.findOne({ where: { email: arg } });
@@ -54,10 +54,10 @@ export class UserService {
   }
 
   async initUser(createUserDto: CreateUserDto): Promise<any> {
-    const { user_id, email, nickname } = createUserDto;
+    const { userId, email, nickname } = createUserDto;
 
     try {
-      await this.checkDupUserInfo("user_id", user_id);
+      await this.checkDupUserInfo("user_id", userId);
       await this.checkDupUserInfo("email", email);
       await this.checkDupUserInfo("nickname", nickname);
     } catch (e) {
@@ -67,10 +67,10 @@ export class UserService {
   }
 
   private async createUser(createUserDto: CreateUserDto) {
-    const { user_id, password, email, nickname } = createUserDto;
+    const { userId, password, email, nickname } = createUserDto;
 
     const user: User = this.userRepository.create({
-      user_id,
+      userId,
       email,
       nickname,
     });

@@ -43,7 +43,7 @@ export class ImportanceService {
       await importance.save();
     }
   }
-  //정렬에 맞게 하기!!
+
   async editUserImportance(
     id: number,
     importanceDtoList: ImportanceDto[],
@@ -54,8 +54,7 @@ export class ImportanceService {
     const returnImportanceDto: ReturnImportanceDto[] = [];
     for await (const importanceDto of importanceDtoList) {
       let importance: Importance;
-      if (importanceDto.id === undefined) {
-        //0으로 못보내줄듯? 수요일날 이야기
+      if (importanceDto.id === 0) {
         importance = this.importanceRepository.create({
           title: importanceDto.title,
           rating: importanceDto.rating,

@@ -25,31 +25,31 @@ export class HouseController {
     return this.houseService.getUserHouseList(id);
   }
 
-  @Get("/:house_id")
+  @Get("/:houseId")
   @UseGuards(AuthGuard())
   getDetailUserHouse(
     @GetUserId() id: number,
-    @Param("house_id", ParseIntPipe) house_id: number,
+    @Param("houseId", ParseIntPipe) houseId: number,
   ): Promise<House> {
-    return this.houseService.getDetailUserHouse(id, house_id);
+    return this.houseService.getDetailUserHouse(id, houseId);
   }
 
   @Post()
   @UseGuards(AuthGuard())
   postUserHouse(
     @GetUserId() id: number,
-    @Body() HouseDto: HouseDto,
+    @Body() houseDto: HouseDto,
   ): Promise<HouseDto> {
-    return this.houseService.postUserHouse(id, HouseDto);
+    return this.houseService.postUserHouse(id, houseDto);
   }
 
-  @Patch("/:house_id")
+  @Patch("/:houseId")
   @UseGuards(AuthGuard())
   editUserHouse(
     @GetUserId() id: number,
-    @Param("house_id", ParseIntPipe) house_id: number,
+    @Param("houseId", ParseIntPipe) houseId: number,
     @Body() houseDto: HouseDto,
   ): Promise<HouseDto> {
-    return this.houseService.editUserHouse(id, house_id, houseDto);
+    return this.houseService.editUserHouse(id, houseId, houseDto);
   }
 }

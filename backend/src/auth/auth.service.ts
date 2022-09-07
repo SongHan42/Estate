@@ -17,14 +17,14 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
-  async logIn(user_id: string, password: string): Promise<any> {
-    const user = await this.userRepository.findOneBy({ user_id });
+  async logIn(userId: string, password: string): Promise<any> {
+    const user = await this.userRepository.findOneBy({ userId });
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
 
     if (!(await await bcrypt.compare(password, user.password)))
       throw new UnauthorizedException("login Failed");
 
-    const payload = { user_id };
+    const payload = { userId };
     const accessToken = await this.jwtService.sign(payload);
 
     return {

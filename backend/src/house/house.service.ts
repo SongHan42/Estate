@@ -44,20 +44,18 @@ export class HouseService {
     return houseListDto;
   }
 
-  async getDetailUserHouse(id: number, house_id: number): Promise<House> {
+  async getDetailUserHouse(id: number, houseId: number): Promise<House> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-    const house: House = await this.houseRepository.findOneById(house_id);
+    const house: House = await this.houseRepository.findOneById(houseId);
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
     return house;
   }
 
-  //새로운 집 만들기!
   async postUserHouse(id: number, houseDto: HouseDto): Promise<any> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     if (houseDto.title === "") throw new BadRequestException(`title need!`);
-    // type 안들어올 때 Null 맞는지 확인
     if (houseDto.type === null) throw new BadRequestException(`type need!`);
 
     const house: House = this.houseRepository.create({
@@ -79,15 +77,14 @@ export class HouseService {
 
   async editUserHouse(
     id: number,
-    house_id: number,
+    houseId: number,
     houseDto: HouseDto,
   ): Promise<HouseDto> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-    const house: House = await this.houseRepository.findOneById(house_id);
+    const house: House = await this.houseRepository.findOneById(houseId);
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
     if (houseDto.title === "") throw new BadRequestException(`title need!`);
-    // type 안들어올 때 Null 맞는지 확인
     if (houseDto.type === null) throw new BadRequestException(`type need!`);
 
     for await (const gradeDto of houseDto.gradeDto) {
