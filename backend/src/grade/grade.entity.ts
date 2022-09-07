@@ -25,6 +25,6 @@ export class Grade extends BaseEntity {
   @Column({ default: "" })
   memo: string;
 
-  @ManyToOne((type) => House, (house) => house.grade)
+  @ManyToOne((type) => House, (house) => house.grade, { onDelete: "CASCADE" })
   house: House;
 }
