@@ -1,40 +1,57 @@
 import React from "react";
 import { ImportanceType, RatingEnum } from "./ImportanceList";
+import Header from "../../Components/Header";
 
 type PropsType = {
   importance: ImportanceType;
+  index: number;
   setImportances: React.Dispatch<React.SetStateAction<ImportanceType[]>>;
+  setDeleteImportanceIds: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
-function ImportanceComponent({ importance, setImportances }: PropsType) {
+function ImportanceComponent({
+  importance,
+  index,
+  setImportances,
+  setDeleteImportanceIds,
+}: PropsType) {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setImportances((importances) => {
-      return importances.map((temp) => {
-        if (temp.id === importance.id) {
-          temp.rating = +e.target.value;
-        }
-        return temp;
-      });
+      importances[index].rating = +e.target.value;
+      return [...importances];
+    });
+  };
+
+  const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImportances((importances) => {
+      importances[index].title = e.target.value;
+      return [...importances];
     });
   };
 
   const onClick = () => {
+    if (importance.id !== 0) {
+      setDeleteImportanceIds((curr) => [...curr, importance.id]);
+    }
     setImportances((importances) => {
-      return importances.filter((temp) => temp.id !== importance.id);
+      importances.splice(index, 1);
+      return [...importances];
     });
   };
 
   return (
     <div className="flex w-full">
+      <Header />
       <div className="flex-col w-full text-center">
         <p className="text-center">{importance.title}</p>
+        <input value={importance.title} onChange={onChangeTitle} />
         <div>
           <label>
             <input
               className="ml-2"
               type="radio"
-              name={importance.id + ""}
-              defaultChecked={importance.rating === RatingEnum.high}
+              name={index + ""}
+              checked={importance.rating === RatingEnum.high}
               value={RatingEnum.high}
               onChange={onChange}
             />{" "}
@@ -44,9 +61,9 @@ function ImportanceComponent({ importance, setImportances }: PropsType) {
             <input
               className="ml-2"
               type="radio"
-              name={importance.id + ""}
+              name={index + ""}
               value={RatingEnum.middle}
-              defaultChecked={importance.rating === RatingEnum.middle}
+              checked={importance.rating === RatingEnum.middle}
               onChange={onChange}
             />{" "}
             중
@@ -55,9 +72,9 @@ function ImportanceComponent({ importance, setImportances }: PropsType) {
             <input
               className="ml-2"
               type="radio"
-              name={importance.id + ""}
+              name={index + ""}
               value={RatingEnum.low}
-              defaultChecked={importance.rating === RatingEnum.low}
+              checked={importance.rating === RatingEnum.low}
               onChange={onChange}
             />{" "}
             하
@@ -65,7 +82,7 @@ function ImportanceComponent({ importance, setImportances }: PropsType) {
         </div>
       </div>
       <button className="w-10" onClick={onClick}>
-        빼기
+        <img className="w-5" src="img/minus.png" />
       </button>
     </div>
   );
