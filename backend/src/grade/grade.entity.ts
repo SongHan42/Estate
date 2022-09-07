@@ -14,7 +14,7 @@ export class Grade extends BaseEntity {
   id: number;
 
   @Column()
-  importance: ImportanceRating;
+  rating: ImportanceRating;
 
   @Column()
   title: string;
