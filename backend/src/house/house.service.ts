@@ -73,7 +73,7 @@ export class HouseService {
     });
     await house.save();
 
-    this.gradeService.createDefaultGrade(id, house);
+    this.gradeService.createDefaultGrade(id, house, houseDto.grade);
 
     return houseDto;
   }

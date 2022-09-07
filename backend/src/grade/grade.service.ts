@@ -5,6 +5,7 @@ import { Importance } from "src/importance/importance.entity";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
 import { Grade } from "./grade.entity";
+import { GradeDto } from "./grade.dto";
 
 @Injectable()
 export class GradeService {
@@ -17,23 +18,19 @@ export class GradeService {
     private userRepository: Repository<User>,
   ) {}
 
-  async createDefaultGrade(userId: number, house: House) {
+  async createDefaultGrade(userId: number, house: House, grades: GradeDto[]) {
     const user: User = await this.userRepository.findOneById(userId);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
 
-    const importances: Importance[] = await this.importanceRepository.findBy({
-      user: {
-        id: user.id,
-      },
-    });
-    importances.sort((a, b) => a.rating - b.rating);
-    for await (const importance of importances) {
-      const grade: Grade = this.gradeRepository.create({
-        rating: importance.rating,
-        title: importance.title,
+    // grade.sort((a, b) => a.rating - b.rating);
+    for await (const grade of grades) {
+      const add_grade: Grade = this.gradeRepository.create({
+        rating: grade.rating,
+        title: grade.title,
+        star: grade.star,
         house,
       });
-      await grade.save();
+      await add_grade.save();
     }
   }
 }
