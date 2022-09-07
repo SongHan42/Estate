@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  ParseIntPipe,
-  HttpStatus,
-  UseGuards,
-} from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, UseGuards } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { GetUserId } from "../auth/get-userId.decorator";
