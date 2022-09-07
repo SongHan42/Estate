@@ -4,9 +4,9 @@ import {
   Column,
   Entity,
   ManyToOne,
-} from 'typeorm';
-import { ImportanceRating } from './importance-rating.enum';
-import { User } from 'src/user/user.entity';
+} from "typeorm";
+import { ImportanceRating } from "./importance-rating.enum";
+import { User } from "src/user/user.entity";
 
 @Entity()
 export class Importance extends BaseEntity {
@@ -16,17 +16,15 @@ export class Importance extends BaseEntity {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ default: ImportanceRating.POOR })
   rating: ImportanceRating;
-
-  @Column()
-  email: string;
 
   @ManyToOne(
     (type) => User,
     (user) => {
       user.importance;
     },
+    { onDelete: "CASCADE" },
   )
   user: User;
 }

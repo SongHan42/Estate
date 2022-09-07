@@ -4,9 +4,9 @@ import {
   Column,
   Entity,
   ManyToOne,
-} from 'typeorm';
-import { User } from 'src/user/user.entity';
-import { House } from 'src/house/house.entity';
+} from "typeorm";
+import { House } from "src/house/house.entity";
+import { ImportanceRating } from "src/importance/importance-rating.enum";
 
 @Entity()
 export class Grade extends BaseEntity {
@@ -14,14 +14,17 @@ export class Grade extends BaseEntity {
   id: number;
 
   @Column()
+  rating: ImportanceRating;
+
+  @Column()
   title: string;
 
-  @Column()
+  @Column({ default: 0 })
   star: number;
 
-  @Column()
+  @Column({ default: "" })
   memo: string;
 
-  @ManyToOne((type) => House, (house) => house.grade)
+  @ManyToOne((type) => House, (house) => house.grade, { onDelete: "CASCADE" })
   house: House;
 }
