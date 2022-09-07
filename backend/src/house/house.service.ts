@@ -47,7 +47,10 @@ export class HouseService {
   async getDetailUserHouse(id: number, houseId: number): Promise<House> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-    const house: House = await this.houseRepository.findOneById(houseId);
+    const house: House = await this.houseRepository.findOne({
+      where: { id },
+      relations: ["grade"],
+    });
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
     return house;
   }
@@ -65,7 +68,7 @@ export class HouseService {
       price: houseDto.price,
       deposit: houseDto.deposit,
       rent: houseDto.rent,
-      maintenance_fee: houseDto.maintenance_fee,
+      maintenance_fee: houseDto.maintenanceFee,
       user,
     });
     await house.save();
@@ -105,7 +108,7 @@ export class HouseService {
     house.price = houseDto.price;
     house.deposit = houseDto.deposit;
     house.rent = houseDto.rent;
-    house.maintenance_fee = houseDto.maintenance_fee;
+    house.maintenanceFee = houseDto.maintenanceFee;
     house.grade = pushGrade;
     house.save();
 

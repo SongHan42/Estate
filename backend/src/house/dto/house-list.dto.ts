@@ -10,7 +10,7 @@ export class HouseListDto {
     this.price = house.price;
     this.deposit = house.deposit;
     this.rent = house.rent;
-    this.maintenance_fee = house.maintenance_fee;
+    this.maintenanceFee = house.maintenanceFee;
   }
   id: number;
   type: HouseType;
@@ -19,5 +19,5 @@ export class HouseListDto {
   price: number;
   deposit: number;
   rent: number;
-  maintenance_fee: number;
+  maintenanceFee: number;
 }

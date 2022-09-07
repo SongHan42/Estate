@@ -34,7 +34,7 @@ export class House extends BaseEntity {
   rent: number;
 
   @Column({ default: 0 })
-  maintenance_fee: number;
+  maintenanceFee: number;
 
   @OneToMany((type) => Grade, (grade) => grade.house, { onDelete: "CASCADE" })
   grade: Grade[];
