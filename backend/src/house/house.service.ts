@@ -114,4 +114,15 @@ export class HouseService {
 
     return houseDto;
   }
+
+  async deleteUserHouse(id: number, houseId: number) {
+    const user: User = await this.userRepository.findOneById(id);
+    if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
+    const house: House = await this.houseRepository.findOne({
+      where: { id: houseId, user: { id: user.id } },
+    });
+    if (!house) throw new NotFoundException(`삭제할 house를 찾을 수 없음`);
+    await this.houseRepository.remove(house);
+    return { isSuccess: true };
+  }
 }

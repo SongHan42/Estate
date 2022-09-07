@@ -1,4 +1,14 @@
-import { Controller, Get, Post, UseGuards, Body, Patch } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Body,
+  Patch,
+  Delete,
+  Param,
+  ParseIntPipe,
+} from "@nestjs/common";
 import { ImportanceService } from "./importance.service";
 import { GetUserId } from "../auth/get-userId.decorator";
 import { AuthGuard } from "@nestjs/passport";
@@ -23,5 +33,14 @@ export class ImportanceController {
     @Body("importances") importanceDtoList: ImportanceDto[],
   ): Promise<ReturnImportanceDto[]> {
     return this.importanceService.editUserImportance(id, importanceDtoList);
+  }
+
+  @Delete("/:importanceId")
+  @UseGuards(AuthGuard())
+  deleteUserImportance(
+    @GetUserId() id: number,
+    @Param("importanceId", ParseIntPipe) importanceId: number,
+  ): Promise<{ isSuccess: boolean }> {
+    return this.importanceService.deleteUserImportance(id, importanceId);
   }
 }

@@ -75,4 +75,19 @@ export class ImportanceService {
     returnImportanceDto.sort((a, b) => a.rating - b.rating);
     return returnImportanceDto;
   }
+
+  async deleteUserImportance(
+    id: number,
+    importanceId: number,
+  ): Promise<{ isSuccess: boolean }> {
+    const user: User = await this.userRepository.findOneById(id);
+    if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
+    const importance: Importance = await this.importanceRepository.findOneById(
+      importanceId,
+    );
+    if (!importance)
+      throw new NotFoundException(`삭제할 importance를 찾을 수 없음`);
+    await this.importanceRepository.remove(importance);
+    return { isSuccess: true };
+  }
 }

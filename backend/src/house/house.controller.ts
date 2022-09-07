@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  Delete,
 } from "@nestjs/common";
 import { HouseService } from "./house.service";
 import { HouseListDto } from "./dto/house-list.dto";
@@ -51,5 +52,14 @@ export class HouseController {
     @Body() houseDto: HouseDto,
   ): Promise<HouseDto> {
     return this.houseService.editUserHouse(id, houseId, houseDto);
+  }
+
+  @Delete("/:houseId")
+  @UseGuards(AuthGuard())
+  deleteUserHouse(
+    @GetUserId() id: number,
+    @Param("houseId", ParseIntPipe) houseId: number,
+  ) {
+    return this.houseService.deleteUserHouse(id, houseId);
   }
 }
