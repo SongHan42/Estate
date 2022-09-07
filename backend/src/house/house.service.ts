@@ -68,7 +68,7 @@ export class HouseService {
       price: houseDto.price,
       deposit: houseDto.deposit,
       rent: houseDto.rent,
-      maintenance_fee: houseDto.maintenanceFee,
+      maintenanceFee: houseDto.maintenanceFee,
       user,
     });
     await house.save();

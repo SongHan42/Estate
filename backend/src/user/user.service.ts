@@ -57,7 +57,7 @@ export class UserService {
     const { userId, email, nickname } = createUserDto;
 
     try {
-      await this.checkDupUserInfo("user_id", userId);
+      await this.checkDupUserInfo("userId", userId);
       await this.checkDupUserInfo("email", email);
       await this.checkDupUserInfo("nickname", nickname);
     } catch (e) {

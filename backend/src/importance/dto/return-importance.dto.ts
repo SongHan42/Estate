@@ -6,10 +6,10 @@ export class ReturnImportanceDto {
     this.id = importance.id;
     this.title = importance.title;
     this.rating = importance.rating;
-    this.user_id = importance.user.id;
+    this.userId = importance.user.id;
   }
   id: number;
   title: string;
   rating: ImportanceRating;
-  user_id: number;
+  userId: number;
 }

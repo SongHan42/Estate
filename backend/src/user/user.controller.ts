@@ -14,7 +14,7 @@ export class UserController {
     return this.userService.getUserInfo(id);
   }
 
-  @Get("/id/:user_id")
+  @Get("/id/:userId")
   checkDupId(
     @Param("userId")
     userId: string,
