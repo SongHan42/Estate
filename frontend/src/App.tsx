@@ -9,8 +9,8 @@ import HouseDetail from "./Routes/HouseDetail/HouseDetail";
 function App() {
   return (
     <Router>
-      <div className="w-screen h-screen bg-[#f6f6f6] flex justify-center">
-        <div className="flex lfex-col justify-center items-center w-96">
+      <div className="w-screen min-h-screen h-full bg-[#f6f6f6] flex justify-center">
+        <div className="flex flex-col justify-center items-center w-96 h-full mt-40">
           <Routes>
             <Route path="/" element={<SignIn />}></Route>
             <Route path="/signup" element={<SignUp />}></Route>
