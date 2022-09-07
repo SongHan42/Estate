@@ -20,7 +20,7 @@ function HouseDetailComponent({ grade, setGrades }: PropsType) {
   return (
     <div>
       <p>{grade.title}</p>
-      <select onChange={onChange}>
+      <select onChange={onChange} value={grade.star}>
         {[1, 2, 3, 4, 5].map((idx) => (
           <option key={idx} value={idx}>
             {idx}
