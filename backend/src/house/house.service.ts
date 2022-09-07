@@ -48,7 +48,7 @@ export class HouseService {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     const house: House = await this.houseRepository.findOne({
-      where: { id },
+      where: { id: houseId },
       relations: ["grade"],
     });
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
