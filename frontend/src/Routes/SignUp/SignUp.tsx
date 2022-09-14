@@ -119,7 +119,7 @@ function SignUp() {
 
     axios
       .post(process.env.REACT_APP_API_URL + "user", {
-        user_id: id,
+        userId: id,
         password,
         email,
         nickname,
@@ -127,7 +127,8 @@ function SignUp() {
       .then(() => {
         navigate("/house");
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log("err", err);
         setCheckNickname(Check.START);
         setCheckEmail(Check.START);
         setCheckId(Check.START);
