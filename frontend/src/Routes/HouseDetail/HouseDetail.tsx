@@ -1,11 +1,10 @@
-import { getConfig } from "../../function/getConfig";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import HouseDetailComponent from "./HouseDetailComponent";
 import Button from "../../Components/Button";
 import { HouseEnum } from "../House/HouseList";
 import Header from "../../Components/Header";
+import { customAxios } from "../../function/customAxios";
 
 export type GradeType = {
   id: number;
@@ -30,27 +29,21 @@ function HouseDetail() {
   useEffect(() => {
     if (id === "0") {
       // first
-      axios
-        .get(process.env.REACT_APP_API_URL + "importance", getConfig())
-        .then((res) => {
-          setGrades(res.data);
-        })
-        .catch(() => console.log());
+      customAxios.get("importance").then((res) => {
+        setGrades(res.data);
+      });
     } else {
       // update
-      axios
-        .get(process.env.REACT_APP_API_URL + "house/" + id, getConfig())
-        .then((res) => {
-          setTitle(res.data.title);
-          setDeposit(res.data.deposit);
-          setMaintenanceFee(res.data.maintenanceFee);
-          setRent(res.data.rent);
-          setArea(res.data.area);
-          setPrice(res.data.price);
-          setTradeType(res.data.type);
-          setGrades(res.data.grade);
-        })
-        .catch(() => console.log("hi"));
+      customAxios.get(`house/${id}`).then((res) => {
+        setTitle(res.data.title);
+        setDeposit(res.data.deposit);
+        setMaintenanceFee(res.data.maintenanceFee);
+        setRent(res.data.rent);
+        setArea(res.data.area);
+        setPrice(res.data.price);
+        setTradeType(res.data.type);
+        setGrades(res.data.grade);
+      });
     }
   }, []);
 
@@ -87,40 +80,32 @@ function HouseDetail() {
       return alert("제목을 입력해주세요");
     }
     if (id === "0") {
-      axios
-        .post(
-          process.env.REACT_APP_API_URL + "house",
-          {
-            title,
-            type: tradeType,
-            area,
-            price: 0,
-            deposit,
-            rent,
-            maintenanceFee,
-            grade: grades,
-          },
-          getConfig(),
-        )
+      customAxios
+        .post("house", {
+          title,
+          type: tradeType,
+          area,
+          price: 0,
+          deposit,
+          rent,
+          maintenanceFee,
+          grade: grades,
+        })
         .then(() => {
           navigate("/house");
         });
     } else {
-      axios
-        .patch(
-          process.env.REACT_APP_API_URL + "house/" + id,
-          {
-            title,
-            type: tradeType,
-            area,
-            price,
-            deposit,
-            rent,
-            maintenanceFee,
-            grade: grades,
-          },
-          getConfig(),
-        )
+      customAxios
+        .patch(`house/${id}`, {
+          title,
+          type: tradeType,
+          area,
+          price,
+          deposit,
+          rent,
+          maintenanceFee,
+          grade: grades,
+        })
         .then(() => {
           navigate("/house");
         });

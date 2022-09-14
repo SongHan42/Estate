@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { HouseEnum, HouseType } from "./HouseList";
-import axios from "axios";
-import { getConfig } from "../../function/getConfig";
+import { customAxios } from "../../function/customAxios";
 
 type PropsType = {
   house: HouseType;
@@ -17,11 +16,9 @@ function HouseComponent({ house, setHouses }: PropsType) {
   };
 
   const onClick = () => {
-    axios
-      .delete(process.env.REACT_APP_API_URL + "house/" + house.id, getConfig())
-      .then(() => {
-        setHouses((curr) => curr.filter((temp) => temp.id !== house.id));
-      });
+    customAxios.delete(`house/${house.id}`).then(() => {
+      setHouses((curr) => curr.filter((temp) => temp.id !== house.id));
+    });
   };
 
   return (

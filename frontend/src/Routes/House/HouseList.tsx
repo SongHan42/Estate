@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import HouseComponent from "./HouseComponent";
-import axios from "axios";
-import { getConfig } from "../../function/getConfig";
 import Button from "../../Components/Button";
 import { Link } from "react-router-dom";
 import Header from "../../Components/Header";
+import { customAxios } from "../../function/customAxios";
 
 export enum HouseEnum {
   DEALING,
@@ -26,12 +25,9 @@ export type HouseType = {
 function HouseList() {
   const [houses, setHouses] = useState<HouseType[]>([]);
   useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_URL + "house", getConfig())
-      .then((res) => {
-        setHouses(res.data);
-      })
-      .catch();
+    customAxios.get("house").then((res) => {
+      setHouses(res.data);
+    });
   }, []);
 
   return (

@@ -4,6 +4,7 @@ import axios from "axios";
 import { getConfig } from "../../function/getConfig";
 import Button from "../../Components/Button";
 import { useNavigate } from "react-router-dom";
+import { customAxios } from "../../function/customAxios";
 
 export enum RatingEnum {
   high,
@@ -23,11 +24,9 @@ function ImportanceList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_URL + "importance", getConfig())
-      .then((res) => {
-        setImportances(res.data);
-      });
+    customAxios.get("importance").then((res) => {
+      setImportances(res.data);
+    });
   }, []);
 
   const onAddClick = () => {
