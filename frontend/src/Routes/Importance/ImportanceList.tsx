@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import ImportanceComponent from "./ImportanceComponent";
-import axios from "axios";
-import { getConfig } from "../../function/getConfig";
 import Button from "../../Components/Button";
 import { useNavigate } from "react-router-dom";
 import { customAxios } from "../../function/customAxios";
@@ -42,20 +40,29 @@ function ImportanceList() {
 
   const onClick = () => {
     deleteImportanceIds.forEach((id) => {
-      axios.delete(
-        process.env.REACT_APP_API_URL + "importance/" + id,
-        getConfig(),
-      );
+      customAxios.delete(`importance/${id}`);
+      // axios.delete(
+      //   process.env.REACT_APP_API_URL + "importance/" + id,
+      //   getConfig(),
+      // );
     });
-    axios
-      .patch(
-        process.env.REACT_APP_API_URL + "importance",
-        { importances: importances },
-        getConfig(),
-      )
+    customAxios
+      .patch(process.env.REACT_APP_API_URL + "importance", {
+        importances: importances,
+      })
       .then(() => {
         navigate("/house");
       });
+
+    // axios
+    //   .patch(
+    //     process.env.REACT_APP_API_URL + "importance",
+    //     { importances: importances },
+    //     getConfig(),
+    //   )
+    //   .then(() => {
+    //     navigate("/house");
+    //   });
   };
 
   return (
