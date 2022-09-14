@@ -15,6 +15,7 @@ export class UserController {
     return this.userService.getUserInfo(id);
   }
 
+  @Public()
   @Get("/id/:userId")
   checkDupId(
     @Param("userId")
@@ -23,6 +24,7 @@ export class UserController {
     return this.userService.checkDupUserInfo("userId", userId);
   }
 
+  @Public()
   @Get("/email/:email")
   checkDupEmail(
     @Param("email")
@@ -31,6 +33,7 @@ export class UserController {
     return this.userService.checkDupUserInfo("email", email);
   }
 
+  @Public()
   @Get("/nickname/:nickname")
   checkDupNickname(
     @Param("nickname")
