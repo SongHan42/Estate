@@ -6,22 +6,30 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./jwt.strategy";
-import { ConfigModule } from "@nestjs/config";
+import { LocalStrategy } from "./strategies/local.strategy";
+import { UserModule } from "src/user/user.module";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { JwtRefreshStrategy } from "./strategies/jwt-refresh.strategy";
 
 @Module({
   imports: [
+    UserModule,
     ConfigModule.forRoot(),
-    PassportModule.register({ defaultStrategy: "jwt" }),
-    JwtModule.register({
-      secret: process.env.JWT_ACCESS_SECRET_KEY, // 토큰을 생성할 때 씀
-      signOptions: {
-        expiresIn: 365 * 24 * 12, //토큰의 유효시간 3600 = 1시간
-        // 갱신도~해야함!
-      },
+    PassportModule,
+    // PassportModule.register({ defaultStrategy: "jwt" }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get("JWT_ACCESS_SECRET_KEY"),
+        signOptions: {
+          expiresIn: `${configService.get("JWT_ACCESS_EXPIRATION_TIME")}s`,
+        },
+      }),
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, LocalStrategy, JwtRefreshStrategy],
   controllers: [AuthController],
   exports: [JwtModule, PassportModule],
 })
