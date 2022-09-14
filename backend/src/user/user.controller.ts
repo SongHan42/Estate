@@ -3,13 +3,14 @@ import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { GetUserId } from "../auth/get-userId.decorator";
 import { AuthGuard } from "@nestjs/passport";
+import { Public } from "src/skip-auth.decorator";
 
 @Controller("user")
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard("defaultStrategy"))
   getUserInfo(@GetUserId() id: number): Promise<any> {
     return this.userService.getUserInfo(id);
   }
@@ -38,8 +39,9 @@ export class UserController {
     return this.userService.checkDupUserInfo("nickname", nickname);
   }
 
+  @Public()
   @Post()
-  async initUser(@Body() createUserDto: CreateUserDto): Promise<any> {
-    return this.userService.initUser(createUserDto);
+  async createNewUser(@Body() createUserDto: CreateUserDto): Promise<any> {
+    return await this.userService.createNewUser(createUserDto);
   }
 }

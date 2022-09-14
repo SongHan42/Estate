@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { House } from "src/house/house.entity";
 import { Importance } from "src/importance/importance.entity";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class User extends BaseEntity {
@@ -43,4 +44,8 @@ export class User extends BaseEntity {
     },
   )
   house: House[];
+
+  @Column({ nullable: true })
+  @Exclude()
+  currentHashedRefreshToken?: string;
 }

@@ -20,6 +20,29 @@ export class UserService {
     private importanceService: ImportanceService,
   ) {}
 
+  async setCurrentRefreshToken(refreshToken: string, id: number) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.userRepository.update(id, { currentHashedRefreshToken });
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {
+    const user: User = await this.userRepository.findOneById(id);
+    if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
+
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.currentHashedRefreshToken,
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
+  }
+
+  async removeRefreshToken(id: number) {
+    return this.userRepository.update(id, { currentHashedRefreshToken: null });
+  }
+
   async getUserInfo(id: number): Promise<any> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
@@ -50,10 +73,10 @@ export class UserService {
       found = await this.userRepository.findOne({ where: { nickname: arg } });
 
     if (!found) return { isSuccess: true };
-    throw new ConflictException(`중복 존재`); //이게 맞을까?
+    throw new BadRequestException("User with that email already exists"); //이게 맞을까?
   }
 
-  async initUser(createUserDto: CreateUserDto): Promise<any> {
+  async createNewUser(createUserDto: CreateUserDto): Promise<any> {
     const { userId, email, nickname } = createUserDto;
 
     try {
@@ -67,7 +90,7 @@ export class UserService {
   }
 
   private async createUser(createUserDto: CreateUserDto) {
-    const { userId, password, email, nickname } = createUserDto;
+    const { userId, email, nickname } = createUserDto;
 
     const user: User = this.userRepository.create({
       userId,
@@ -75,9 +98,9 @@ export class UserService {
       nickname,
     });
 
-    if (password != "") {
+    if (createUserDto.password != "") {
       const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(password, salt);
+      const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
       user.password = hashedPassword;
     } else throw new BadRequestException(`비밀번호를 입력하세요`);
 
@@ -85,6 +108,8 @@ export class UserService {
 
     await this.importanceService.createDefaultImportance(user.id);
 
-    return { isSuccess: true };
+    const { password, ...result } = user;
+
+    return result; //api 문서 수정, 비밀번호 빼고
   }
 }
