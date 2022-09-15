@@ -1,6 +1,5 @@
 import React from "react";
 import { ImportanceType, RatingEnum } from "./ImportanceList";
-import Header from "../../Components/Header";
 
 type PropsType = {
   importance: ImportanceType;
@@ -41,9 +40,7 @@ function ImportanceComponent({
 
   return (
     <div className="flex w-full">
-      <Header />
       <div className="flex-col w-full text-center">
-        <p className="text-center">{importance.title}</p>
         <input value={importance.title} onChange={onChangeTitle} />
         <div>
           <label>

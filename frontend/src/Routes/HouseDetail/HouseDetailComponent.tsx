@@ -7,26 +7,41 @@ type PropsType = {
 };
 
 function HouseDetailComponent({ grade, setGrades }: PropsType) {
-  const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onClick = (value: number) => {
     setGrades((currGrades) =>
       currGrades.map((currGrade) => {
         if (currGrade.id === grade.id) {
-          currGrade.star = +e.target.value;
+          currGrade.star = value;
         }
         return currGrade;
       }),
     );
   };
+
   return (
     <div>
       <p>{grade.title}</p>
-      <select onChange={onChange} value={grade.star}>
-        {[1, 2, 3, 4, 5].map((idx) => (
-          <option key={idx} value={idx}>
-            {idx}
-          </option>
-        ))}
-      </select>
+      <span
+        className="inline-block h-12 w-60 relative"
+        style={{ backgroundImage: "url(/img/gray_star.png)" }}
+      >
+        <span
+          className="inline-block h-12 w-60 z-10 overflow-hidden"
+          style={{
+            backgroundImage: "url(/img/blue_star.png)",
+            width: grade.star ? 20 * grade.star + "%" : 20 + "%",
+          }}
+        ></span>
+        <div className="absolute inset-0">
+          {[1, 2, 3, 4, 5].map((value, idx) => (
+            <button
+              key={idx}
+              className="w-12 h-12"
+              onClick={() => onClick(value)}
+            ></button>
+          ))}
+        </div>
+      </span>
     </div>
   );
 }
