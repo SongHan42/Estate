@@ -74,7 +74,7 @@ export class AuthController {
     const { accessToken, ...accessOption } = this.authService.getJwtAccessToken(
       user.id,
     );
-    res.cookie("Authentication", accessToken, accessOption);
-    return user;
+    // res.cookie("Authentication", accessToken, accessOption);
+    return { accessToken };
   }
 }
