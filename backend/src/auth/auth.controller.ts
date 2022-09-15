@@ -38,18 +38,15 @@ export class AuthController {
       user.id,
     );
     const { refreshToken } = this.authService.getJwtRefreshToken(user.id);
-    if (user.firstLogin === false)
-      await this.userRepository.update(user.id, { firstLogin: true });
-    return { accessToken, refreshToken, isFirstLogin: user.firstLogin };
+    if (user.isFirstLogin === true)
+      await this.userRepository.update(user.id, { isFirstLogin: false });
+    return { accessToken, refreshToken, isFirstLogin: user.isFirstLogin };
   }
 
   @Public()
   @UseGuards(JwtRefreshGuard)
   @Post("/logout")
   async logout(@Req() req, @Res({ passthrough: true }) res: Response) {
-    // const { accessOption, refreshOption } =
-    //   this.authService.getCookiesForLogOut();
-
     await this.userService.removeRefreshToken(req.user.id);
   }
 
