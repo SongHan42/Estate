@@ -34,24 +34,27 @@ export class HouseController {
   }
 
   @Post()
-  postUserHouse(@GetUserId() id: number, @Body() houseDto: HouseDto): void {
-    this.houseService.postUserHouse(id, houseDto);
+  async postUserHouse(
+    @GetUserId() id: number,
+    @Body() houseDto: HouseDto,
+  ): Promise<void> {
+    await this.houseService.postUserHouse(id, houseDto);
   }
 
   @Patch("/:houseId")
-  editUserHouse(
+  async editUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
     @Body() houseDto: HouseDto,
-  ): void {
-    this.houseService.editUserHouse(id, houseId, houseDto);
+  ): Promise<void> {
+    await this.houseService.editUserHouse(id, houseId, houseDto);
   }
 
   @Delete("/:houseId")
-  deleteUserHouse(
+  async deleteUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
-  ): void {
-    this.houseService.deleteUserHouse(id, houseId);
+  ): Promise<void> {
+    await this.houseService.deleteUserHouse(id, houseId);
   }
 }
