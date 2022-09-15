@@ -125,7 +125,7 @@ function SignUp() {
         nickname,
       })
       .then(() => {
-        navigate("/house");
+        navigate("/");
       })
       .catch(() => {
         setCheckNickname(Check.START);
