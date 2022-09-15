@@ -24,16 +24,20 @@ function HouseComponent({ house, setHouses }: PropsType) {
   return (
     <div className="flex justify-between">
       <Link to={"/house/" + house.id}>
-        <div className="flex w-full justify-center">
+        <div className="flex w-full">
           <p className="pl-2 pr-2 text-xl">{typeText()}</p>
           <p className="pl-2 pr-2 text-xl">{house.title}</p>
           <p className="pl-2 pr-2 text-xl">{house.area} m^2</p>
         </div>
         {house.type === HouseEnum.DEALING ? (
-          <p className="pl-2 pr-2 text-xl mb-2">{house.price} 만원</p>
+          <p className="pl-2 pr-2 text-xl mb-2">
+            {house.price} 만원 , 상:
+            {house.highAvg} / 중:{house.middleAvg} / 하:{house.lowAvg}
+          </p>
         ) : (
           <p className="pl-2 pr-2 text-xl mb-2">
-            {house.deposit}/{house.rent}/{house.maintenanceFee} 만원
+            {house.deposit}/{house.rent}/{house.maintenanceFee} 만원 , 상:
+            {house.highAvg} / 중:{house.middleAvg} / 하:{house.lowAvg}
           </p>
         )}
       </Link>

@@ -20,6 +20,9 @@ export type HouseType = {
   deposit: number;
   rent: number;
   maintenanceFee: number;
+  highAvg: number;
+  middleAvg: number;
+  lowAvg: number;
 };
 
 function HouseList() {
