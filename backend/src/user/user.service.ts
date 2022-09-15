@@ -3,6 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
   ConflictException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { User } from "./user.entity";
 import * as bcrypt from "bcryptjs";
@@ -22,7 +23,9 @@ export class UserService {
 
   async setCurrentRefreshToken(refreshToken: string, id: number) {
     const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    console.log("refreshToken", refreshToken);
     await this.userRepository.update(id, { currentHashedRefreshToken });
+    console.log("currentHashedRefreshToken", currentHashedRefreshToken);
   }
 
   async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {
@@ -36,6 +39,8 @@ export class UserService {
 
     if (isRefreshTokenMatching) {
       return user;
+    } else {
+      throw new UnauthorizedException();
     }
   }
 

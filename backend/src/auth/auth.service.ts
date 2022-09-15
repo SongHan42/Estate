@@ -68,7 +68,7 @@ export class AuthService {
   getJwtAccessToken(id: number) {
     const payload = { id };
     const token = this.jwtService.sign(payload, {
-      secret: this.configService.get("JWT_ACCESS_SECRET"),
+      secret: this.configService.get("JWT_ACCESS_SECRET_KEY"),
       expiresIn: `${this.configService.get("JWT_ACCESS_EXPIRATION_TIME")}s`,
     });
     return {
@@ -79,7 +79,7 @@ export class AuthService {
   getJwtRefreshToken(id: number) {
     const payload = { id };
     const token = this.jwtService.sign(payload, {
-      secret: this.configService.get("JWT_REFRESH_SECRET"),
+      secret: this.configService.get("JWT_REFRESH_SECRET_KEY"),
       expiresIn: `${this.configService.get("JWT_REFRESH_EXPIRATION_TIME")}s`,
     });
 

@@ -28,14 +28,10 @@ export class JwtRefreshStrategy extends PassportStrategy(
   }
 
   async validate(req, payload: any) {
-    if (req) {
-      if (req.cookies) {
-        const refreshToken = req.cookies.Refresh;
-        return this.userService.getUserIfRefreshTokenMatches(
-          refreshToken,
-          payload.id,
-        );
-      }
-    }
+    const refreshToken = req.cookies?.Refresh;
+    return this.userService.getUserIfRefreshTokenMatches(
+      refreshToken,
+      payload.id,
+    );
   }
 }
