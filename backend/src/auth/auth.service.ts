@@ -89,15 +89,15 @@ export class AuthService {
   getCookiesForLogOut() {
     return {
       accessOption: {
-        domain: "localhost",
-        path: "/",
-        httpOnly: true,
+        // domain: "localhost",
+        // path: "/",
+        // httpOnly: true,
         maxAge: 0,
       },
       refreshOption: {
-        domain: "localhost",
-        path: "/",
-        httpOnly: true,
+        // domain: "localhost",
+        // path: "/",
+        // httpOnly: true,
         maxAge: 0,
       },
     };
