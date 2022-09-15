@@ -8,12 +8,10 @@ import {
   Body,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { Public } from "../skip-auth.decorator";
 import { Response } from "express";
 import { User } from "src/user/user.entity";
 import { UserService } from "src/user/user.service";
-import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -23,7 +21,6 @@ export class AuthController {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-
     private authService: AuthService,
     private userService: UserService,
   ) {}
@@ -40,6 +37,8 @@ export class AuthController {
   @Post("/login")
   // async login(@Req() req, @Res({ passthrough: true }) res: Response) {
   async login(
+    // @Body("userId") userId: string,
+    // @Body("password") password: string,
     @Body() { userId, password },
     @Res({ passthrough: true }) res: Response,
   ) {
@@ -54,14 +53,14 @@ export class AuthController {
     res.cookie("Refresh", refreshToken, refreshOption);
     if (user.firstLogin === false) {
       user.firstLogin = true; //user.save작동ㅎ안훼~~
-      res.redirect(process.env.FE_URL + "importance");
-    } else {
-      res.redirect(process.env.FE_URL + "house");
+      // await this.userRepository.update(id, { currentHashedRefreshToken });
+      await this.userRepository.update(user.id, { firstLogin: true });
     }
     // const { token, isFirstLogin, ...option } = await this.authService.login(
     //   req.user,
     // );
     // res.cookie("Authentication", token, option);
+    return { token: accessToken, isFirstLogin: user.firstLogin };
   }
 
   @Public()

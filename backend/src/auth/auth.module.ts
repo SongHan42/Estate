@@ -15,8 +15,8 @@ import { JwtRefreshStrategy } from "./strategies/jwt-refresh.strategy";
   imports: [
     UserModule,
     ConfigModule.forRoot(),
-    PassportModule,
-    // PassportModule.register({ defaultStrategy: "jwt" }),
+    // PassportModule,
+    PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

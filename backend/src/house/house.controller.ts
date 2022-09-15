@@ -21,13 +21,13 @@ export class HouseController {
   constructor(private houseService: HouseService) {}
 
   @Get()
-  @UseGuards(AuthGuard("defaultStrategy"))
+  // @UseGuards(AuthGuard("jwt"))
   getUserHouseList(@GetUserId() id: number): Promise<HouseListDto[]> {
     return this.houseService.getUserHouseList(id);
   }
 
   @Get("/:houseId")
-  @UseGuards(AuthGuard("defaultStrategy"))
+  // @UseGuards(AuthGuard())
   getDetailUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
@@ -36,7 +36,7 @@ export class HouseController {
   }
 
   @Post()
-  @UseGuards(AuthGuard("defaultStrategy"))
+  // @UseGuards(AuthGuard())
   postUserHouse(
     @GetUserId() id: number,
     @Body() houseDto: HouseDto,
@@ -45,7 +45,7 @@ export class HouseController {
   }
 
   @Patch("/:houseId")
-  @UseGuards(AuthGuard("defaultStrategy"))
+  // @UseGuards(AuthGuard())
   editUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
@@ -55,7 +55,7 @@ export class HouseController {
   }
 
   @Delete("/:houseId")
-  @UseGuards(AuthGuard("defaultStrategy"))
+  @UseGuards(AuthGuard())
   deleteUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,

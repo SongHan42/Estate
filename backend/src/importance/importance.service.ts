@@ -18,13 +18,11 @@ export class ImportanceService {
   async getUserImportance(id: number): Promise<Importance[]> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-
     const importance: Importance[] = await this.importanceRepository.findBy({
       user: {
         id: user.id,
       },
     });
-
     return importance;
   }
 

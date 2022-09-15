@@ -16,12 +16,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request) => {
-          if (request) {
-            if (request.cookies) return request.cookies.Authentication;
-          }
+          return request?.cookies?.Authentication;
+          // if (request) {
+          //   if (request.cookies) return request.cookies.Authentication;
+          // }
         },
       ]),
-      ignoreExpiration: false,
+      // ignoreExpiration: false,
       secretOrKey: configService.get("JWT_ACCESS_SECRET_KEY"),
     });
   }

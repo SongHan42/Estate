@@ -10,7 +10,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  @UseGuards(AuthGuard("defaultStrategy"))
+  // @UseGuards(AuthGuard("jwt"))
   getUserInfo(@GetUserId() id: number): Promise<any> {
     return this.userService.getUserInfo(id);
   }

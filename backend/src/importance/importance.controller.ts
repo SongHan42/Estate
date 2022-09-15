@@ -21,13 +21,13 @@ export class ImportanceController {
   constructor(private importanceService: ImportanceService) {}
 
   @Get()
-  @UseGuards(AuthGuard("defaultStrategy"))
+  // @UseGuards(AuthGuard("jwt"))
   getUserImportance(@GetUserId() id: number): Promise<Importance[]> {
     return this.importanceService.getUserImportance(id);
   }
 
   @Patch()
-  @UseGuards(AuthGuard("defaultStrategy"))
+  // @UseGuards(AuthGuard("jwt"))
   editUserImportance(
     @GetUserId() id: number,
     @Body("importances") importanceDtoList: ImportanceDto[],
@@ -36,7 +36,7 @@ export class ImportanceController {
   }
 
   @Delete("/:importanceId")
-  @UseGuards(AuthGuard("defaultStrategy"))
+  // @UseGuards(AuthGuard("jwt"))
   deleteUserImportance(
     @GetUserId() id: number,
     @Param("importanceId", ParseIntPipe) importanceId: number,
