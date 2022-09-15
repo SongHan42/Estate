@@ -1,5 +1,5 @@
 export enum ImportanceRating {
-  GOOD,
-  AVERAGE,
-  POOR,
+  HIGH,
+  MIDDLE,
+  LOW,
 }

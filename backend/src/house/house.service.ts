@@ -11,6 +11,7 @@ import { User } from "src/user/user.entity";
 import { HouseDto } from "./dto/house.dto";
 import { GradeService } from "src/grade/grade.service";
 import { Grade } from "src/grade/grade.entity";
+import { ImportanceRating } from "src/importance/importance-rating.enum";
 
 @Injectable()
 export class HouseService {
@@ -34,6 +35,7 @@ export class HouseService {
           id: id,
         },
       },
+      relations: ["grade"],
     });
 
     const houseListDto: HouseListDto[] = [];
@@ -55,7 +57,7 @@ export class HouseService {
     return house;
   }
 
-  async postUserHouse(id: number, houseDto: HouseDto): Promise<any> {
+  async postUserHouse(id: number, houseDto: HouseDto): Promise<void> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     if (houseDto.title === "") throw new BadRequestException(`title need!`);
@@ -74,15 +76,13 @@ export class HouseService {
     await house.save();
 
     this.gradeService.createDefaultGrade(id, house, houseDto.grade);
-
-    return houseDto;
   }
 
   async editUserHouse(
     id: number,
     houseId: number,
     houseDto: HouseDto,
-  ): Promise<HouseDto> {
+  ): Promise<void> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     const house: House = await this.houseRepository.findOneById(houseId);
@@ -111,11 +111,9 @@ export class HouseService {
     house.maintenanceFee = houseDto.maintenanceFee;
     house.grade = pushGrade;
     house.save();
-
-    return houseDto;
   }
 
-  async deleteUserHouse(id: number, houseId: number) {
+  async deleteUserHouse(id: number, houseId: number): Promise<void> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     const house: House = await this.houseRepository.findOne({
@@ -123,6 +121,5 @@ export class HouseService {
     });
     if (!house) throw new NotFoundException(`삭제할 house를 찾을 수 없음`);
     await this.houseRepository.remove(house);
-    return { isSuccess: true };
   }
 }
