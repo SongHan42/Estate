@@ -127,8 +127,7 @@ function SignUp() {
       .then(() => {
         navigate("/house");
       })
-      .catch((err) => {
-        console.log("err", err);
+      .catch(() => {
         setCheckNickname(Check.START);
         setCheckEmail(Check.START);
         setCheckId(Check.START);

@@ -24,11 +24,12 @@ function SignIn() {
 
     axios
       .post(process.env.REACT_APP_API_URL + "auth/login", {
-        user_id: id,
+        userId: id,
         password,
       })
       .then((res) => {
-        cookies.set("token", res.data.token);
+        cookies.set("accessToken", res.data.accessToken);
+        cookies.set("refreshToken", res.data.refreshToken);
         if (res.data.isFirstLogin) navigate("/importance");
         else navigate("/House");
       })
