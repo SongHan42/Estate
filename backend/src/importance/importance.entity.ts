@@ -16,7 +16,7 @@ export class Importance extends BaseEntity {
   @Column()
   title: string;
 
-  @Column({ default: ImportanceRating.POOR })
+  @Column({ default: ImportanceRating.LOW })
   rating: ImportanceRating;
 
   @ManyToOne(

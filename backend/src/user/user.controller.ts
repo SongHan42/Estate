@@ -10,7 +10,6 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  // @UseGuards(AuthGuard("jwt"))
   getUserInfo(@GetUserId() id: number): Promise<any> {
     return this.userService.getUserInfo(id);
   }
@@ -44,7 +43,7 @@ export class UserController {
 
   @Public()
   @Post()
-  async createNewUser(@Body() createUserDto: CreateUserDto): Promise<any> {
-    return await this.userService.createNewUser(createUserDto);
+  async createNewUser(@Body() createUserDto: CreateUserDto): Promise<void> {
+    await this.userService.createNewUser(createUserDto);
   }
 }

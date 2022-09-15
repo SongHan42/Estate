@@ -15,21 +15,13 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      // jwtFromRequest: ExtractJwt.fromExtractors([
-      //   (request) => {
-      //     return request?.cookies?.Authentication;
-      //     // }
-      //   },
-      // ]),
-      // ignoreExpiration: false,
       secretOrKey: configService.get("JWT_ACCESS_SECRET_KEY"),
     });
   }
 
   async validate(payload: any) {
-    // return { userId: payload.sub, username: payload.username };
     const user: User = await this.userRepository.findOneBy({
-      userId: payload.sub,
+      id: payload.id,
     });
     if (!user) throw new NotFoundException();
     return user;
