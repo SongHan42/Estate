@@ -14,8 +14,8 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: false })
-  firstLogin: boolean;
+  @Column({ default: true })
+  isFirstLogin: boolean;
 
   @Column()
   userId: string;

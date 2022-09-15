@@ -28,7 +28,6 @@ export class AuthController {
   ) {}
 
   @Public()
-  // @UseGuards(LocalAuthGuard)
   @Post("/login")
   async login(
     @Body() { userId, password },
@@ -38,28 +37,17 @@ export class AuthController {
     const { accessToken, ...accessOption } = this.authService.getJwtAccessToken(
       user.id,
     );
-    const { refreshToken, ...refreshOption } =
-      this.authService.getJwtRefreshToken(user.id);
-    await this.userService.setCurrentRefreshToken(refreshToken, user.id);
-    res.cookie("Authentication", accessToken, accessOption);
-    res.cookie("Refresh", refreshToken, refreshOption);
-    if (user.firstLogin === false)
-      await this.userRepository.update(user.id, { firstLogin: true });
-
-    return { accessToken, refreshToken, isFirstLogin: user.firstLogin };
+    const { refreshToken } = this.authService.getJwtRefreshToken(user.id);
+    if (user.isFirstLogin === true)
+      await this.userRepository.update(user.id, { isFirstLogin: false });
+    return { accessToken, refreshToken, isFirstLogin: user.isFirstLogin };
   }
 
   @Public()
   @UseGuards(JwtRefreshGuard)
   @Post("/logout")
   async logout(@Req() req, @Res({ passthrough: true }) res: Response) {
-    const { accessOption, refreshOption } =
-      this.authService.getCookiesForLogOut();
-
     await this.userService.removeRefreshToken(req.user.id);
-
-    res.cookie("Authentication", "", accessOption);
-    res.cookie("Refresh", "", refreshOption);
   }
 
   @Public()
@@ -71,10 +59,7 @@ export class AuthController {
   ) {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException();
-    const { accessToken, ...accessOption } = this.authService.getJwtAccessToken(
-      user.id,
-    );
-    // res.cookie("Authentication", accessToken, accessOption);
+    const { accessToken } = this.authService.getJwtAccessToken(user.id);
     return { accessToken };
   }
 }

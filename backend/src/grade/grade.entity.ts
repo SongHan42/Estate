@@ -19,7 +19,7 @@ export class Grade extends BaseEntity {
   @Column()
   title: string;
 
-  @Column({ default: 0 })
+  @Column({ default: 1 })
   star: number;
 
   @Column({ default: "" })

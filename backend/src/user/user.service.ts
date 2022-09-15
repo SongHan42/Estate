@@ -2,7 +2,6 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
-  ConflictException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { User } from "./user.entity";
@@ -23,9 +22,7 @@ export class UserService {
 
   async setCurrentRefreshToken(refreshToken: string, id: number) {
     const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    console.log("refreshToken", refreshToken);
     await this.userRepository.update(id, { currentHashedRefreshToken });
-    console.log("currentHashedRefreshToken", currentHashedRefreshToken);
   }
 
   async getUserIfRefreshTokenMatches(refreshToken: string, id: number) {
@@ -78,10 +75,10 @@ export class UserService {
       found = await this.userRepository.findOne({ where: { nickname: arg } });
 
     if (!found) return { isSuccess: true };
-    throw new BadRequestException("User with that email already exists"); //이게 맞을까?
+    throw new BadRequestException("User with that email already exists");
   }
 
-  async createNewUser(createUserDto: CreateUserDto): Promise<any> {
+  async createNewUser(createUserDto: CreateUserDto): Promise<void> {
     const { userId, email, nickname } = createUserDto;
 
     try {
@@ -91,7 +88,7 @@ export class UserService {
     } catch (e) {
       throw e;
     }
-    return await this.createUser(createUserDto);
+    await this.createUser(createUserDto);
   }
 
   private async createUser(createUserDto: CreateUserDto) {
@@ -112,9 +109,5 @@ export class UserService {
     await user.save();
 
     await this.importanceService.createDefaultImportance(user.id);
-
-    const { password, ...result } = user;
-
-    return result; //api 문서 수정, 비밀번호 빼고
   }
 }

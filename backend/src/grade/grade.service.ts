@@ -27,7 +27,6 @@ export class GradeService {
       const add_grade: Grade = this.gradeRepository.create({
         rating: grade.rating,
         title: grade.title,
-        star: grade.star,
         house,
       });
       await add_grade.save();

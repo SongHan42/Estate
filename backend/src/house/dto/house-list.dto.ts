@@ -1,5 +1,6 @@
 import { HouseType } from "../house-type.enum";
 import { House } from "../house.entity";
+import { ImportanceRating } from "src/importance/importance-rating.enum";
 
 export class HouseListDto {
   constructor(house: House) {
@@ -11,6 +12,30 @@ export class HouseListDto {
     this.deposit = house.deposit;
     this.rent = house.rent;
     this.maintenanceFee = house.maintenanceFee;
+    house.grade.forEach((grade) => {
+      if (grade.rating === ImportanceRating.HIGH) {
+        this.highAvg += grade.star;
+      } else if (grade.rating === ImportanceRating.MIDDLE) {
+        this.middleAvg += grade.star;
+      } else if (grade.rating === ImportanceRating.LOW) {
+        this.lowAvg += grade.star;
+      }
+    });
+    this.highAvg = this.highAvg
+      ? this.highAvg /
+        house.grade.filter((value) => value.rating === ImportanceRating.HIGH)
+          .length
+      : 0;
+    this.middleAvg = this.middleAvg
+      ? this.middleAvg /
+        house.grade.filter((value) => value.rating === ImportanceRating.MIDDLE)
+          .length
+      : 0;
+    this.lowAvg = this.lowAvg
+      ? this.lowAvg /
+        house.grade.filter((value) => value.rating === ImportanceRating.LOW)
+          .length
+      : 0;
   }
   id: number;
   type: HouseType;
@@ -20,4 +45,7 @@ export class HouseListDto {
   deposit: number;
   rent: number;
   maintenanceFee: number;
+  highAvg: number = 0;
+  middleAvg: number = 0;
+  lowAvg: number = 0;
 }
