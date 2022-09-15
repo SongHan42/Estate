@@ -67,7 +67,7 @@ function ImportanceList() {
 
   return (
     <div className="flex flex-col w-full items-center justify-center pb-10">
-      <h1 className="text-3xl">중요도 선택</h1>
+      <h1 className="text-3xl">체크리스트 및 중요도 설정</h1>
       {importances
         ? importances.map((importance, index) => {
             return (

@@ -1,6 +1,5 @@
 import React from "react";
 import { ImportanceType, RatingEnum } from "./ImportanceList";
-import Header from "../../Components/Header";
 
 type PropsType = {
   importance: ImportanceType;
@@ -16,14 +15,14 @@ function ImportanceComponent({
   setDeleteImportanceIds,
 }: PropsType) {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImportances((importances) => {
+    setImportances(importances => {
       importances[index].rating = +e.target.value;
       return [...importances];
     });
   };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImportances((importances) => {
+    setImportances(importances => {
       importances[index].title = e.target.value;
       return [...importances];
     });
@@ -31,9 +30,9 @@ function ImportanceComponent({
 
   const onClick = () => {
     if (importance.id !== 0) {
-      setDeleteImportanceIds((curr) => [...curr, importance.id]);
+      setDeleteImportanceIds(curr => [...curr, importance.id]);
     }
-    setImportances((importances) => {
+    setImportances(importances => {
       importances.splice(index, 1);
       return [...importances];
     });
@@ -41,9 +40,7 @@ function ImportanceComponent({
 
   return (
     <div className="flex w-full">
-      <Header />
       <div className="flex-col w-full text-center">
-        <p className="text-center">{importance.title}</p>
         <input value={importance.title} onChange={onChangeTitle} />
         <div>
           <label>
