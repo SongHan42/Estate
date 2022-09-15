@@ -20,6 +20,9 @@ export type HouseType = {
   deposit: number;
   rent: number;
   maintenanceFee: number;
+  highAvg: number;
+  middleAvg: number;
+  lowAvg: number;
 };
 
 function HouseList() {
@@ -33,14 +36,14 @@ function HouseList() {
   return (
     <div className="w-full">
       <Header />
-      <h1 className="text-4xl text-center">리스트</h1>
+      <h1 className="text-4xl text-center">매물 리스트</h1>
       {houses.map((house) => {
         return (
           <HouseComponent key={house.id} house={house} setHouses={setHouses} />
         );
       })}
       <Link to="/house/0">
-        <Button style="fixed bottom-0 left-0" text="추가" />
+        <Button style="fixed bottom-0 left-0" text="매물 추가" />
       </Link>
     </div>
   );

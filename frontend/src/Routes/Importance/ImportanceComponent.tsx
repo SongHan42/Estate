@@ -15,14 +15,14 @@ function ImportanceComponent({
   setDeleteImportanceIds,
 }: PropsType) {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImportances((importances) => {
+    setImportances(importances => {
       importances[index].rating = +e.target.value;
       return [...importances];
     });
   };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImportances((importances) => {
+    setImportances(importances => {
       importances[index].title = e.target.value;
       return [...importances];
     });
@@ -30,9 +30,9 @@ function ImportanceComponent({
 
   const onClick = () => {
     if (importance.id !== 0) {
-      setDeleteImportanceIds((curr) => [...curr, importance.id]);
+      setDeleteImportanceIds(curr => [...curr, importance.id]);
     }
-    setImportances((importances) => {
+    setImportances(importances => {
       importances.splice(index, 1);
       return [...importances];
     });
