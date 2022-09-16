@@ -12,6 +12,7 @@ export class HouseListDto {
     this.deposit = house.deposit;
     this.rent = house.rent;
     this.maintenanceFee = house.maintenanceFee;
+    this.isBookmark = house.isBookmark;
     house.grade.forEach((grade) => {
       if (grade.rating === ImportanceRating.HIGH) {
         this.highAvg += grade.star;
@@ -45,6 +46,7 @@ export class HouseListDto {
   deposit: number;
   rent: number;
   maintenanceFee: number;
+  isBookmark: boolean;
   highAvg: number = 0;
   middleAvg: number = 0;
   lowAvg: number = 0;

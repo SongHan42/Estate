@@ -11,7 +11,6 @@ import {
 } from "@nestjs/common";
 import { HouseService } from "./house.service";
 import { HouseListDto } from "./dto/house-list.dto";
-import { AuthGuard } from "@nestjs/passport";
 import { GetUserId } from "src/auth/get-userId.decorator";
 import { HouseDto } from "./dto/house.dto";
 import { House } from "./house.entity";
@@ -56,5 +55,13 @@ export class HouseController {
     @Param("houseId", ParseIntPipe) houseId: number,
   ): Promise<void> {
     await this.houseService.deleteUserHouse(id, houseId);
+  }
+
+  @Patch("/bookmark/:houseId")
+  updateBookmark(
+    @GetUserId() id: number,
+    @Param("houseId", ParseIntPipe) houseId: number,
+  ): Promise<{ isSuccess: boolean }> {
+    return this.houseService.updateBookmark(id, houseId);
   }
 }
