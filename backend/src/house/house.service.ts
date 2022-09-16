@@ -122,4 +122,17 @@ export class HouseService {
     if (!house) throw new NotFoundException(`삭제할 house를 찾을 수 없음`);
     await this.houseRepository.remove(house);
   }
+
+  async updateBookmark(
+    id: number,
+    houseId: number,
+  ): Promise<{ isSuccess: boolean }> {
+    const house: House = await this.houseRepository.findOne({
+      where: { id: houseId, user: { id } },
+    });
+    if (!house) throw new NotFoundException();
+    house.isBookmark = !house.isBookmark;
+    await house.save();
+    return { isSuccess: true };
+  }
 }
