@@ -17,6 +17,7 @@ import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { GetUserId } from "./get-userId.decorator";
+import * as bcrypt from "bcryptjs";
 
 @Controller("auth")
 export class AuthController {
@@ -38,8 +39,15 @@ export class AuthController {
       user.id,
     );
     const { refreshToken } = this.authService.getJwtRefreshToken(user.id);
+    const salt = await bcrypt.genSalt();
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, salt);
     if (user.isFirstLogin === true)
-      await this.userRepository.update(user.id, { isFirstLogin: false });
+      await this.userRepository.update(user.id, {
+        isFirstLogin: false,
+      });
+
+    await this.userRepository.update(user.id, { currentHashedRefreshToken });
+
     return { accessToken, refreshToken, isFirstLogin: user.isFirstLogin };
   }
 
