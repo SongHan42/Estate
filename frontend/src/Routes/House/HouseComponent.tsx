@@ -9,6 +9,10 @@ type PropsType = {
 };
 
 function HouseComponent({ house, setHouses }: PropsType) {
+  const buttonImg = house.isBookMark
+    ? "/img/blue_bookmark.png"
+    : "/img/gray_bookmark.png";
+
   const typeText = () => {
     if (house.type === HouseEnum.DEALING) return "[매매]";
     else if (house.type === HouseEnum.JEONSE) return "[전세]";
@@ -21,8 +25,24 @@ function HouseComponent({ house, setHouses }: PropsType) {
     });
   };
 
+  const onClickBookMark = () => {
+    customAxios.patch(`house/bookmark/${house.id}`).then(() => {
+      setHouses((currHouse) => {
+        return currHouse.map((value) => {
+          if (value.id === house.id) {
+            value.isBookMark = !value.isBookMark;
+          }
+          return value;
+        });
+      });
+    });
+  };
+
   return (
     <div className="flex justify-between">
+      <button onClick={onClickBookMark}>
+        <img className="w-5" src={buttonImg} alt="" />
+      </button>
       <Link to={"/house/" + house.id}>
         <div className="flex w-full">
           <p className="pl-2 pr-2 text-xl">{typeText()}</p>

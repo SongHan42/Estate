@@ -23,15 +23,19 @@ export type HouseType = {
   highAvg: number;
   middleAvg: number;
   lowAvg: number;
+  isBookMark: boolean;
 };
 
 function HouseList() {
   const [houses, setHouses] = useState<HouseType[]>([]);
+
   useEffect(() => {
     customAxios.get("house").then((res) => {
       setHouses(res.data);
     });
   }, []);
+
+  houses.sort((a, b) => b.isBookMark - a.isBookMark);
 
   return (
     <div className="w-full">
