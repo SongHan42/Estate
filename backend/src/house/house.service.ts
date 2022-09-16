@@ -11,7 +11,6 @@ import { User } from "src/user/user.entity";
 import { HouseDto } from "./dto/house.dto";
 import { GradeService } from "src/grade/grade.service";
 import { Grade } from "src/grade/grade.entity";
-import { ImportanceRating } from "src/importance/importance-rating.enum";
 
 @Injectable()
 export class HouseService {
@@ -36,6 +35,10 @@ export class HouseService {
         },
       },
       relations: ["grade"],
+      order: {
+        isBookmark: "DESC",
+        id: "ASC",
+      },
     });
 
     const houseListDto: HouseListDto[] = [];
@@ -52,6 +55,11 @@ export class HouseService {
     const house: House = await this.houseRepository.findOne({
       where: { id: houseId },
       relations: ["grade"],
+      order: {
+        grade: {
+          title: "ASC",
+        },
+      },
     });
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
     return house;

@@ -33,28 +33,28 @@ export class HouseController {
   }
 
   @Post()
-  async postUserHouse(
+  postUserHouse(
     @GetUserId() id: number,
     @Body() houseDto: HouseDto,
   ): Promise<void> {
-    await this.houseService.postUserHouse(id, houseDto);
+    return this.houseService.postUserHouse(id, houseDto);
   }
 
   @Patch("/:houseId")
-  async editUserHouse(
+  editUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
     @Body() houseDto: HouseDto,
   ): Promise<void> {
-    await this.houseService.editUserHouse(id, houseId, houseDto);
+    return this.houseService.editUserHouse(id, houseId, houseDto);
   }
 
   @Delete("/:houseId")
-  async deleteUserHouse(
+  deleteUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
   ): Promise<void> {
-    await this.houseService.deleteUserHouse(id, houseId);
+    return this.houseService.deleteUserHouse(id, houseId);
   }
 
   @Patch("/bookmark/:houseId")
