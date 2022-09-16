@@ -29,6 +29,10 @@ export class User extends BaseEntity {
   @Column()
   nickname: string;
 
+  @Column({ nullable: true })
+  @Exclude()
+  currentHashedRefreshToken?: string;
+
   @OneToMany(
     (type) => Importance,
     (importance) => {
@@ -44,8 +48,4 @@ export class User extends BaseEntity {
     },
   )
   house: House[];
-
-  @Column({ nullable: true })
-  @Exclude()
-  currentHashedRefreshToken?: string;
 }
