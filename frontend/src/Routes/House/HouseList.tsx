@@ -23,7 +23,7 @@ export type HouseType = {
   highAvg: number;
   middleAvg: number;
   lowAvg: number;
-  isBookMark: boolean;
+  isBookmark: boolean;
 };
 
 function HouseList() {
@@ -35,7 +35,7 @@ function HouseList() {
     });
   }, []);
 
-  houses.sort((a, b) => b.isBookMark - a.isBookMark);
+  console.log(houses);
 
   return (
     <div className="w-full">

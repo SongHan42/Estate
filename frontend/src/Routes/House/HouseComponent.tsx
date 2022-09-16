@@ -9,7 +9,7 @@ type PropsType = {
 };
 
 function HouseComponent({ house, setHouses }: PropsType) {
-  const buttonImg = house.isBookMark
+  const buttonImg = house.isBookmark
     ? "/img/blue_bookmark.png"
     : "/img/gray_bookmark.png";
 
@@ -28,12 +28,14 @@ function HouseComponent({ house, setHouses }: PropsType) {
   const onClickBookMark = () => {
     customAxios.patch(`house/bookmark/${house.id}`).then(() => {
       setHouses((currHouse) => {
-        return currHouse.map((value) => {
-          if (value.id === house.id) {
-            value.isBookMark = !value.isBookMark;
-          }
-          return value;
-        });
+        return currHouse
+          .map((value) => {
+            if (value.id === house.id) {
+              value.isBookmark = !value.isBookmark;
+            }
+            return value;
+          })
+          .sort((a, b) => b.isBookmark - a.isBookmark);
       });
     });
   };
