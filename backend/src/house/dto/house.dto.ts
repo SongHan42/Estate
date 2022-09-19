@@ -9,5 +9,6 @@ export class HouseDto {
   deposit: number;
   rent: number;
   maintenanceFee: number;
+  memo: string;
   grade: GradeDto[]; //테스트필요
 }

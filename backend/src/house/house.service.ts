@@ -79,6 +79,7 @@ export class HouseService {
       deposit: houseDto.deposit,
       rent: houseDto.rent,
       maintenanceFee: houseDto.maintenanceFee,
+      memo: houseDto.memo,
       user,
     });
     await house.save();
@@ -103,7 +104,6 @@ export class HouseService {
       if (find) {
         find.title = gradeDto.title;
         find.star = gradeDto.star;
-        find.memo = gradeDto.memo;
         await find.save();
       }
     }
@@ -118,7 +118,8 @@ export class HouseService {
     house.rent = houseDto.rent;
     house.maintenanceFee = houseDto.maintenanceFee;
     house.grade = pushGrade;
-    house.save();
+    house.memo = houseDto.memo;
+    await house.save();
   }
 
   async deleteUserHouse(id: number, houseId: number): Promise<void> {
