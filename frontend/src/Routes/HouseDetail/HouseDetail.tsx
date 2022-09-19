@@ -10,7 +10,6 @@ export type GradeType = {
   id: number;
   title: string;
   star: number;
-  memo: string;
   rating: number;
 };
 
@@ -79,7 +78,7 @@ function HouseDetail() {
   };
 
   const onChangeMemo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMemo(e.target.memo);
+    setMemo(e.target.value);
   };
 
   const onClick = () => {
@@ -208,11 +207,7 @@ function HouseDetail() {
           {toggles[3] ? "▼" : "▶"} 메모
         </li>
         {toggles[3] ? (
-          <input
-            className="w-full"
-            onChange={onChangeMemo}
-            value={memo}
-          ></input>
+          <input className="w-full" onChange={onChangeMemo} value={memo} />
         ) : null}
         <li className="text-xl" onClick={() => onClickToggle(0)}>
           {toggles[0] ? "▼" : "▶"} 중요도 상
