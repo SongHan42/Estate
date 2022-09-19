@@ -119,7 +119,7 @@ export class HouseService {
     house.maintenanceFee = houseDto.maintenanceFee;
     house.grade = pushGrade;
     house.memo = houseDto.memo;
-    house.save();
+    await house.save();
   }
 
   async deleteUserHouse(id: number, houseId: number): Promise<void> {
