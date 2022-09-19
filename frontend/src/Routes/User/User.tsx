@@ -37,17 +37,18 @@ function User() {
 
   const onCheckNewNickname = async () => {
     if (newNickname.length < 4) return alert("닉네임이 너무 짧습니다.");
-
-    axios
-      .get(process.env.REACT_APP_API_URL + "user/nickname/" + newNickname)
-      .then((res) => {
-        if (res.data.isSuccess) {
-          setCheckNickname(Check.NOT_DUP);
-        }
-      })
-      .catch(() => {
-        setCheckNickname(Check.DUP);
-      });
+    if (nickname !== newNickname) {
+      axios
+        .get(process.env.REACT_APP_API_URL + "user/nickname/" + newNickname)
+        .then((res) => {
+          if (res.data.isSuccess) {
+            setCheckNickname(Check.NOT_DUP);
+          }
+        })
+        .catch(() => {
+          setCheckNickname(Check.DUP);
+        });
+    } else setCheckNickname(Check.NOT_DUP);
   };
 
   const onChangeCheckPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
