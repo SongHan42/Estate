@@ -19,14 +19,14 @@ function HouseDetailComponent({ grade, setGrades }: PropsType) {
   };
 
   return (
-    <div>
+    <div className="text-center">
       <p>{grade.title}</p>
       <span
-        className="inline-block h-12 w-60 relative"
+        className={`inline-block h-12 w-60 relative text-left`}
         style={{ backgroundImage: "url(/img/gray_star.png)" }}
       >
         <span
-          className="inline-block h-12 w-60 z-10 overflow-hidden"
+          className={`inline-block h-12 w-60 z-10 overflow-hidden`}
           style={{
             backgroundImage: "url(/img/blue_star.png)",
             width: grade.star ? 20 * grade.star + "%" : 20 + "%",

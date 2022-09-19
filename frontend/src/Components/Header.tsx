@@ -45,7 +45,7 @@ function Header() {
       {user ? (
         <div className="text-right">
           <Link to="/importance">
-            <button>{user.nickname}</button>
+            <button>{user.nickname}&nbsp;</button>
           </Link>
           <button onClick={onClick}>| logout</button>
         </div>

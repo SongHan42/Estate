@@ -4,14 +4,14 @@ import {
   Body,
   Get,
   Param,
-  UseGuards,
   Delete,
+  Patch,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { GetUserId } from "../auth/get-userId.decorator";
-import { AuthGuard } from "@nestjs/passport";
 import { Public } from "src/skip-auth.decorator";
+import { UpdateUserDto } from "./dto/update-user.dto";
 
 @Controller("user")
 export class UserController {
@@ -25,6 +25,20 @@ export class UserController {
   @Delete()
   deleteUser(@GetUserId() id: number): Promise<void> {
     return this.userService.deleteUser(id);
+  }
+
+  @Public()
+  @Post()
+  async createNewUser(@Body() createUserDto: CreateUserDto): Promise<void> {
+    return await this.userService.createNewUser(createUserDto);
+  }
+
+  @Patch()
+  updateUser(
+    @GetUserId() id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<void> {
+    return this.userService.updateUser(id, updateUserDto);
   }
 
   @Public()
@@ -52,11 +66,5 @@ export class UserController {
     nickname: string,
   ): Promise<{ isSuccess: boolean }> {
     return this.userService.checkDupUserInfo("nickname", nickname);
-  }
-
-  @Public()
-  @Post()
-  async createNewUser(@Body() createUserDto: CreateUserDto): Promise<void> {
-    await this.userService.createNewUser(createUserDto);
   }
 }
