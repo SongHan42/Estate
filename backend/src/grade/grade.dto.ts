@@ -7,11 +7,9 @@ export class GradeDto {
     this.rating = grade.rating;
     this.title = grade.title;
     this.star = grade.star;
-    this.memo = grade.memo;
   }
   id: number;
   rating: ImportanceRating;
   title: string;
   star: number;
-  memo: string;
 }
