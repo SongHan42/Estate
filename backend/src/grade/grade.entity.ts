@@ -22,9 +22,10 @@ export class Grade extends BaseEntity {
   @Column({ default: 1 })
   star: number;
 
-  @Column({ default: "" })
-  memo: string;
-
-  @ManyToOne((type) => House, (house) => house.grade, { onDelete: "CASCADE" })
+  @ManyToOne(
+    type => House,
+    house => house.grade,
+    { onDelete: "CASCADE" },
+  )
   house: House;
 }

@@ -39,6 +39,9 @@ export class House extends BaseEntity {
   @Column({ default: false })
   isBookmark: boolean;
 
+  @Column({ default: "" })
+  memo: string;
+
   @OneToMany((type) => Grade, (grade) => grade.house, { onDelete: "CASCADE" })
   grade: Grade[];
 
