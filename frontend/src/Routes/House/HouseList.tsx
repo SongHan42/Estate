@@ -24,6 +24,7 @@ export type HouseType = {
   middleAvg: number;
   lowAvg: number;
   isBookmark: boolean;
+  memo: string;
 };
 
 function HouseList() {
@@ -34,8 +35,6 @@ function HouseList() {
       setHouses(res.data);
     });
   }, []);
-
-  console.log(houses);
 
   return (
     <div className="w-full">

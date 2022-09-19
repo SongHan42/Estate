@@ -54,14 +54,17 @@ function HouseComponent({ house, setHouses }: PropsType) {
         {house.type === HouseEnum.DEALING ? (
           <p className="pl-2 pr-2 text-xl mb-2">
             {house.price} 만원 , 상:
-            {house.highAvg} / 중:{house.middleAvg} / 하:{house.lowAvg}
+            {house.highAvg.toFixed(2)} / 중:{house.middleAvg.toFixed(2)} / 하:
+            {house.lowAvg.toFixed(2)}
           </p>
         ) : (
           <p className="pl-2 pr-2 text-xl mb-2">
             {house.deposit}/{house.rent}/{house.maintenanceFee} 만원 , 상:
-            {house.highAvg} / 중:{house.middleAvg} / 하:{house.lowAvg}
+            {house.highAvg.toFixed(2)} / 중:{house.middleAvg.toFixed(2)} / 하:
+            {house.lowAvg.toFixed(2)}
           </p>
         )}
+        {house.memo ? <p>{house.memo}</p> : null}
       </Link>
       <button onClick={onClick}>
         <img className="w-5" src="img/minus.png" alt="" />

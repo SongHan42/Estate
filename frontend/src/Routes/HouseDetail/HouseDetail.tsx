@@ -10,7 +10,6 @@ export type GradeType = {
   id: number;
   title: string;
   star: number;
-  memo: string;
   rating: number;
 };
 
@@ -24,6 +23,8 @@ function HouseDetail() {
   const [area, setArea] = useState(0);
   const [tradeType, setTradeType] = useState<HouseEnum>(HouseEnum.DEALING);
   const [price, setPrice] = useState(0);
+  const [toggles, setToggles] = useState([true, true, true, true]);
+  const [memo, setMemo] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +44,7 @@ function HouseDetail() {
         setPrice(res.data.price);
         setTradeType(res.data.type);
         setGrades(res.data.grade);
+        setMemo(res.data.memo);
       });
     }
   }, []);
@@ -75,6 +77,10 @@ function HouseDetail() {
     setMaintenanceFee(+e.target.value);
   };
 
+  const onChangeMemo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMemo(e.target.value);
+  };
+
   const onClick = () => {
     if (title === "") {
       return alert("제목을 입력해주세요");
@@ -89,6 +95,7 @@ function HouseDetail() {
           deposit,
           rent,
           maintenanceFee,
+          memo,
           grade: grades,
         })
         .then(() => {
@@ -104,12 +111,20 @@ function HouseDetail() {
           deposit,
           rent,
           maintenanceFee,
+          memo,
           grade: grades,
         })
         .then(() => {
           navigate("/house");
         });
     }
+  };
+
+  const onClickToggle = (idx: number) => {
+    setToggles((toggle) => {
+      toggle[idx] = !toggle[idx];
+      return [...toggle];
+    });
   };
 
   return (
@@ -188,39 +203,57 @@ function HouseDetail() {
         </>
       )}
       <ul className="w-full">
-        <li>중요도 상</li>
-        {grades.map((grade) => {
-          if (grade.rating === 0)
-            return (
-              <HouseDetailComponent
-                key={grade.id}
-                grade={grade}
-                setGrades={setGrades}
-              />
-            );
-        })}
-        <li>중요도 중</li>
-        {grades.map((grade) => {
-          if (grade.rating === 1)
-            return (
-              <HouseDetailComponent
-                key={grade.id}
-                grade={grade}
-                setGrades={setGrades}
-              />
-            );
-        })}
-        <li>중요도 하</li>
-        {grades.map((grade) => {
-          if (grade.rating === 2)
-            return (
-              <HouseDetailComponent
-                key={grade.id}
-                grade={grade}
-                setGrades={setGrades}
-              />
-            );
-        })}
+        <li className="text-xl" onClick={() => onClickToggle(3)}>
+          {toggles[3] ? "▼" : "▶"} 메모
+        </li>
+        {toggles[3] ? (
+          <input className="w-full" onChange={onChangeMemo} value={memo} />
+        ) : null}
+        <li className="text-xl" onClick={() => onClickToggle(0)}>
+          {toggles[0] ? "▼" : "▶"} 중요도 상
+        </li>
+        {toggles[0]
+          ? grades.map((grade) => {
+              if (grade.rating === 0)
+                return (
+                  <HouseDetailComponent
+                    key={grade.id}
+                    grade={grade}
+                    setGrades={setGrades}
+                  />
+                );
+            })
+          : null}
+        <li className="text-xl" onClick={() => onClickToggle(1)}>
+          {toggles[1] ? "▼" : "▶"} 중요도 중
+        </li>
+        {toggles[1]
+          ? grades.map((grade) => {
+              if (grade.rating === 1)
+                return (
+                  <HouseDetailComponent
+                    key={grade.id}
+                    grade={grade}
+                    setGrades={setGrades}
+                  />
+                );
+            })
+          : null}
+        <li className="text-xl" onClick={() => onClickToggle(2)}>
+          ︎{toggles[2] ? "▼" : "▶"} 중요도 하
+        </li>
+        {toggles[2]
+          ? grades.map((grade) => {
+              if (grade.rating === 2)
+                return (
+                  <HouseDetailComponent
+                    key={grade.id}
+                    grade={grade}
+                    setGrades={setGrades}
+                  />
+                );
+            })
+          : null}
       </ul>
       <Button text="저장" onClick={onClick} />
     </div>
