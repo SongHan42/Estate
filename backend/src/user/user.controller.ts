@@ -4,8 +4,8 @@ import {
   Body,
   Get,
   Param,
-  Patch,
   Delete,
+  Patch,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -20,6 +20,11 @@ export class UserController {
   @Get()
   getUserInfo(@GetUserId() id: number): Promise<any> {
     return this.userService.getUserInfo(id);
+  }
+
+  @Delete()
+  deleteUser(@GetUserId() id: number): Promise<void> {
+    return this.userService.deleteUser(id);
   }
 
   @Public()
