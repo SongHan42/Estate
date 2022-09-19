@@ -61,6 +61,8 @@ function User() {
     if (newPassword !== checkPassword) {
       return "비밀번호가 일치하지 않습니다.";
     }
+    if (!newPassword)
+      return "비밀번호 변경을 원하지 않을 경우 수정완료를 누르세요.";
     return "사용가능한 비밀번호입니다.";
   };
 
@@ -76,19 +78,19 @@ function User() {
     }
 
     customAxios
-      .patch(process.env.REACT_APP_API_URL + "user", {
-        newPassword,
-        newNickname,
+      .patch("user", {
+        password: newPassword,
+        nickname: newNickname,
       })
       .then(() => {
-        navigate("/"); //팝업띄우고 houselist로 가면 좋을듯?
+        alert("회원정보 수정 완료");
+        navigate("/house");
       })
       .catch(() => {
         setCheckNickname(Check.START);
         return alert("중복 확인을 다시 해주세요!");
       });
   };
-
   return (
     <div>
       <h1 className="text-3xl mb-5">회원정보 수정</h1>
