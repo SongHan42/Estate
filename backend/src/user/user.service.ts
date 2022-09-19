@@ -97,7 +97,8 @@ export class UserService {
     const { nickname, password } = updateUserDto;
 
     try {
-      if (nickname) await this.checkDupUserInfo("nickname", nickname);
+      if (nickname && user.nickname !== nickname)
+        await this.checkDupUserInfo("nickname", nickname);
     } catch (e) {
       throw e;
     }
