@@ -39,7 +39,7 @@ function HouseList() {
   return (
     <div className="w-full">
       <Header />
-      <h1 className="text-4xl text-center">매물 리스트</h1>
+      <h1 className="text-2xl w-full text-center mb-6">매물 리스트</h1>
       {houses.map((house) => {
         return (
           <HouseComponent key={house.id} house={house} setHouses={setHouses} />

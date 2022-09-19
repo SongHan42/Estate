@@ -81,11 +81,10 @@ function ImportanceList() {
             );
           })
         : null}
-      {/* <Button style={"mb-5"} text="추가" onClick={onAddClick} /> */}
       <button onClick={onAddClick}>
         <img className="w-5 mt-5" src="img/plus.png" alt="plus" />
       </button>
-      <Button style={"fixed bottom-0"} text="제출" onClick={onClick} />
+      <Button style={"fixed bottom-0"} text="저장" onClick={onClick} />
     </div>
   );
 }

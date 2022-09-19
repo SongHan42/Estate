@@ -41,30 +41,32 @@ function HouseComponent({ house, setHouses }: PropsType) {
   };
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between mb-3">
       <button onClick={onClickBookMark}>
         <img className="w-5" src={buttonImg} alt="" />
       </button>
       <Link to={"/house/" + house.id}>
         <div className="flex w-full">
-          <p className="pl-2 pr-2 text-xl">{typeText()}</p>
-          <p className="pl-2 pr-2 text-xl">{house.title}</p>
-          <p className="pl-2 pr-2 text-xl">{house.area} m^2</p>
+          <p className="pl-2 pr-2 text-base">{typeText()}</p>
+          <p className="pl-2 pr-2 text-base">{house.title}</p>
+          <p className="pl-2 pr-2 text-base">{house.area} m^2</p>
         </div>
         {house.type === HouseEnum.DEALING ? (
-          <p className="pl-2 pr-2 text-xl mb-2">
+          <p className="pl-2 pr-2 text-base">
             {house.price} 만원 , 상:
             {house.highAvg.toFixed(2)} / 중:{house.middleAvg.toFixed(2)} / 하:
             {house.lowAvg.toFixed(2)}
           </p>
         ) : (
-          <p className="pl-2 pr-2 text-xl mb-2">
+          <p className="pl-2 pr-2 text-base">
             {house.deposit}/{house.rent}/{house.maintenanceFee} 만원 , 상:
             {house.highAvg.toFixed(2)} / 중:{house.middleAvg.toFixed(2)} / 하:
             {house.lowAvg.toFixed(2)}
           </p>
         )}
-        {house.memo ? <p>{house.memo}</p> : null}
+        {house.memo ? (
+          <p className="pl-2 pr-2 text-base">{house.memo}</p>
+        ) : null}
       </Link>
       <button onClick={onClick}>
         <img className="w-5" src="img/minus.png" alt="" />
