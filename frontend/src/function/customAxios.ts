@@ -30,6 +30,6 @@ customAxios.interceptors.response.use(
       cookies.set("accessToken", res.data.accessToken);
       return customAxios.request(err.config);
     }
-    return err;
+    return Promise.reject(err);
   },
 );
