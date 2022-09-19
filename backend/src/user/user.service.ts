@@ -91,6 +91,12 @@ export class UserService {
     await this.createUser(createUserDto);
   }
 
+  async deleteUser(id: number): Promise<void> {
+    const user: User = await this.userRepository.findOne({ where: { id } });
+
+    await user.remove();
+  }
+
   private async createUser(createUserDto: CreateUserDto) {
     const { userId, email, nickname } = createUserDto;
 

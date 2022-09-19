@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Param, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  UseGuards,
+  Delete,
+} from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { GetUserId } from "../auth/get-userId.decorator";
@@ -12,6 +20,11 @@ export class UserController {
   @Get()
   getUserInfo(@GetUserId() id: number): Promise<any> {
     return this.userService.getUserInfo(id);
+  }
+
+  @Delete()
+  deleteUser(@GetUserId() id: number): Promise<void> {
+    return this.userService.deleteUser(id);
   }
 
   @Public()
