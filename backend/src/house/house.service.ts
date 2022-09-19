@@ -118,6 +118,7 @@ export class HouseService {
     house.rent = houseDto.rent;
     house.maintenanceFee = houseDto.maintenanceFee;
     house.grade = pushGrade;
+    house.memo = houseDto.memo;
     house.save();
   }
 
