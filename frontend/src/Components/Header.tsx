@@ -41,13 +41,18 @@ function Header() {
   }, []);
 
   return (
-    <div className="fixed top-2 right-4">
+    <div>
       {user ? (
-        <div className="text-right">
-          <Link to="/setting">
-            <button>{user.nickname}&nbsp;</button>
+        <div>
+          <Link to="/house">
+            <button className="fixed top-2 left-4">HouseList</button>
           </Link>
-          <button onClick={onClick}>| logout</button>
+          <Link to="/setting">
+            <button className="fixed top-2 right-20"> {user.nickname}</button>
+          </Link>
+          <button className="fixed top-2 right-4" onClick={onClick}>
+            | logout
+          </button>
         </div>
       ) : null}
     </div>
