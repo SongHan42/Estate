@@ -91,7 +91,7 @@ function HouseDetail() {
           title,
           type: tradeType,
           area,
-          price: 0,
+          price,
           deposit,
           rent,
           maintenanceFee,
