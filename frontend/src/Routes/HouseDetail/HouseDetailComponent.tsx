@@ -33,10 +33,10 @@ function HouseDetailComponent({ grade, setGrades }: PropsType) {
           }}
         ></span>
         <div className="absolute inset-0">
-          {[1, 2, 3, 4, 5].map((value, idx) => (
+          {[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map((value, idx) => (
             <button
               key={idx}
-              className="w-12 h-12"
+              className="w-6 h-12"
               onClick={() => onClick(value)}
             ></button>
           ))}
