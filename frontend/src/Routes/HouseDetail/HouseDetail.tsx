@@ -148,7 +148,7 @@ function HouseDetail() {
           </select>
         </div>
         <div>
-          <label> 평수</label>
+          <label> 면적: </label>
           <input
             className="w-20"
             type="number"

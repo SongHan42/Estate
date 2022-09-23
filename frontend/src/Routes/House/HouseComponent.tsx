@@ -65,7 +65,7 @@ function HouseComponent({ house, setHouses }: PropsType) {
           </p>
         )}
         {house.memo ? (
-          <p className="pl-2 pr-2 text-base">{house.memo}</p>
+          <p className="pl-2 pr-2 text-base">특이사항: {house.memo}</p>
         ) : null}
       </Link>
       <button onClick={onClick}>
