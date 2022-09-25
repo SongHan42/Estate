@@ -20,9 +20,10 @@ export class HouseListDto {
       } else if (grade.rating === ImportanceRating.MIDDLE) {
         this.middleAvg += grade.star;
       } else if (grade.rating === ImportanceRating.LOW) {
-        this.lowAvg += grade.star;
+        this.lowAvg += Number(grade.star);
       }
     });
+    console.log(this.lowAvg);
     this.highAvg = this.highAvg
       ? this.highAvg /
         house.grade.filter((value) => value.rating === ImportanceRating.HIGH)
@@ -49,7 +50,7 @@ export class HouseListDto {
   maintenanceFee: number;
   isBookmark: boolean;
   memo: string;
-  highAvg: number = 0;
-  middleAvg: number = 0;
-  lowAvg: number = 0;
+  highAvg = 0;
+  middleAvg = 0;
+  lowAvg = 0;
 }
