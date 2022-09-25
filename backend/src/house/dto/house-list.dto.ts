@@ -23,7 +23,6 @@ export class HouseListDto {
         this.lowAvg += Number(grade.star);
       }
     });
-    console.log(this.lowAvg);
     this.highAvg = this.highAvg
       ? this.highAvg /
         house.grade.filter((value) => value.rating === ImportanceRating.HIGH)
