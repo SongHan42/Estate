@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import HouseDetailComponent from "./HouseDetailComponent";
+import EvaluationComponent from "./EvaluationComponent";
 import { HouseEnum, TradeEnum } from "../House/HouseList";
 import { customAxios } from "../../function/customAxios";
 import PinkButton from "../../Components/PinkButton";
@@ -235,7 +235,7 @@ function HouseDetail() {
             ? grades.map((grade) => {
                 if (grade.rating === 0)
                   return (
-                    <HouseDetailComponent
+                    <EvaluationComponent
                       key={grade.id}
                       grade={grade}
                       setGrades={setGrades}
@@ -250,7 +250,7 @@ function HouseDetail() {
             ? grades.map((grade) => {
                 if (grade.rating === 1)
                   return (
-                    <HouseDetailComponent
+                    <EvaluationComponent
                       key={grade.id}
                       grade={grade}
                       setGrades={setGrades}
@@ -265,7 +265,7 @@ function HouseDetail() {
             ? grades.map((grade) => {
                 if (grade.rating === 2)
                   return (
-                    <HouseDetailComponent
+                    <EvaluationComponent
                       key={grade.id}
                       grade={grade}
                       setGrades={setGrades}

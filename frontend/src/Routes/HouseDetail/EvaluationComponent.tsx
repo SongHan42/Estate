@@ -6,7 +6,7 @@ type PropsType = {
   setGrades: React.Dispatch<React.SetStateAction<GradeType[]>>;
 };
 
-function HouseDetailComponent({ grade, setGrades }: PropsType) {
+function EvaluationComponent({ grade, setGrades }: PropsType) {
   const onClick = (value: number) => {
     setGrades((currGrades) =>
       currGrades.map((currGrade) => {
@@ -46,4 +46,4 @@ function HouseDetailComponent({ grade, setGrades }: PropsType) {
   );
 }
 
-export default HouseDetailComponent;
+export default EvaluationComponent;
