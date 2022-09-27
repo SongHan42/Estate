@@ -54,7 +54,9 @@ function HouseOfferingComponent({
                   {houseOffering.maintenanceFee} 만원{" "}
                 </p>
               )}
-              <p className="px-3 text-base">{houseOffering.discription}</p>
+              <p className="px-3 text-base">
+                {houseOffering.address} {houseOffering.addressDetail}
+              </p>
 
               <p className="px-3 text-base">
                 {housetypeText()}•{houseOffering.area}•방{" "}

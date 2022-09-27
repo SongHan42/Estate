@@ -104,7 +104,7 @@ function HouseOfferingDetail() {
       customAxios
         .post("house/offering", {
           title,
-          tradeType: tradeType,
+          tradeType,
           area,
           price,
           deposit,
@@ -113,7 +113,7 @@ function HouseOfferingDetail() {
           discription,
           address,
           addressDetail,
-          housetype: houseType,
+          houseType,
         })
         .then(() => {
           navigate("/house/offering");
@@ -122,7 +122,7 @@ function HouseOfferingDetail() {
       customAxios
         .patch(`house/offering/${id}`, {
           title,
-          tradeType: tradeType,
+          tradeType,
           area,
           price,
           deposit,
@@ -131,7 +131,7 @@ function HouseOfferingDetail() {
           discription,
           address,
           addressDetail,
-          housetype: houseType,
+          houseType,
         })
         .then(() => {
           navigate("/house/offering");
@@ -168,30 +168,6 @@ function HouseOfferingDetail() {
             value={addressDetail}
           />
         </div>
-        <div>
-          <label>거래 형식: </label>
-          <select onChange={onChangeTradeType} value={tradeType}>
-            {["매매", "전세", "월세"].map((tradetype, index) => {
-              return (
-                <option key={index} value={index}>
-                  {tradetype}
-                </option>
-              );
-            })}
-          </select>
-          <label>주거 형식: </label>
-          <select onChange={onChangeHouseType} value={houseType}>
-            {["아파트", "오피스텔", "빌라", "주택", "기타"].map(
-              (housetype, index) => {
-                return (
-                  <option key={index} value={index}>
-                    {housetype}
-                  </option>
-                );
-              },
-            )}
-          </select>
-        </div>
         <label> 면적: </label>
         <input
           className="w-20"
@@ -200,6 +176,30 @@ function HouseOfferingDetail() {
           value={area}
         />
         <label>m^2</label>
+        <div>
+          <label>거래 형식: </label>
+          <select onChange={onChangeTradeType} value={tradeType}>
+            {["매매", "전세", "월세"].map((tradeType, index) => {
+              return (
+                <option key={index} value={index}>
+                  {tradeType}
+                </option>
+              );
+            })}
+          </select>
+          <label>주거 형식: </label>
+          <select onChange={onChangeHouseType} value={houseType}>
+            {["아파트", "오피스텔", "빌라", "주택", "기타"].map(
+              (houseType, index) => {
+                return (
+                  <option key={index} value={index}>
+                    {houseType}
+                  </option>
+                );
+              },
+            )}
+          </select>
+        </div>
       </div>
       {tradeType === TradeEnum.DEALING ? (
         <div className="">

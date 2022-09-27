@@ -14,6 +14,14 @@ function Search() {
     setSearchAddress(e.target.value);
   };
 
+  const onEnter = (e) => {
+    if (e.key === "Enter") {
+      customAxios.get(`/house/search/${address}`).then((res) => {
+        setHouseOfferings(res.data);
+      });
+    }
+  };
+
   useEffect(() => {
     customAxios.get(`/house/search/${address}`).then((res) => {
       setHouseOfferings(res.data);
@@ -29,6 +37,7 @@ function Search() {
             onChange={onChangeSearch}
             value={address}
             placeholder="(동)으로 검색"
+            onKeyPress={onEnter}
           />
         </div>
         {houseOfferings.map((houseOffering) => {

@@ -15,6 +15,7 @@ export type HouseOfferingType = {
   rent: number;
   maintenanceFee: number;
   address: string;
+  addressDetail: string;
   floor: number;
   roomNum: number;
   discription: string;
