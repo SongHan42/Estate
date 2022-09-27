@@ -33,10 +33,8 @@ function HouseOfferingDetail() {
     });
   };
 
-  const handleComplete = (data) => {
+  const handleComplete = () => {
     setPopup(!popup);
-    // setAddress(data.target);
-    console.log("data", data.target);
   };
 
   useEffect(() => {
@@ -54,6 +52,10 @@ function HouseOfferingDetail() {
       setAddress(res.data.address);
     });
   }, []);
+
+  useEffect(() => {
+    setAddress(enroll_company.address);
+  }, [enroll_company]);
 
   const onChangeTradeType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTradeType(+e.target.value);
@@ -89,10 +91,6 @@ function HouseOfferingDetail() {
 
   const onChangeDiscription = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDiscription(e.target.value);
-  };
-
-  const onChangeAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value);
   };
 
   const onChangeAddressDetail = (e: React.ChangeEvent<HTMLInputElement>) => {
