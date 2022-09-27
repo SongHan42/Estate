@@ -94,7 +94,8 @@ function HouseDetail() {
       customAxios
         .post("house", {
           title,
-          type: tradeType,
+          tradeType,
+          houseType,
           area,
           price,
           deposit,
@@ -110,7 +111,8 @@ function HouseDetail() {
       customAxios
         .patch(`house/${id}`, {
           title,
-          type: tradeType,
+          tradeType,
+          houseType,
           area,
           price,
           deposit,
