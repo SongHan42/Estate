@@ -11,7 +11,8 @@ function PinkButton({ style, text, onClick }: PropsType) {
     <button
       onClick={onClick}
       className={
-        "rounded-3xl bg-[#FFE2E2] p-2 text-[#6B6B6B] rounded-lg" + style
+        "fixed right-2 top-2 rounded-3xl bg-[#FFE2E2] p-1 text-[#6B6B6B] rounded-lg" +
+        style
       }
     >
       <p className="mx-5">{text}</p>

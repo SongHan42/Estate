@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Footer from "../../Components/Footer";
 import { customAxios } from "../../function/customAxios";
 import { HouseEnum, TradeEnum } from "../House/HouseList";
+import PinkButton from "../../Components/PinkButton";
+import DaumPostcode from "react-daum-postcode";
 
-function HouseOffering() {
+function HouseOfferingDetail() {
   const { id } = useParams();
   const [title, setTitle] = useState("");
   const [deposit, setDeposit] = useState(0);
@@ -15,8 +18,22 @@ function HouseOffering() {
   const [discription, setDiscription] = useState("");
   const [houseType, setHouseType] = useState<HouseEnum>(HouseEnum.APT);
   const [address, setAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
+  const [openPostcode, setOpenPostcode] = useState(false);
   const navigate = useNavigate();
 
+  const handle = {
+    // 버튼 클릭 이벤트
+    clickButton: () => {
+      setOpenPostcode((current) => !current);
+      // window.open()
+    },
+
+    // 주소 선택 이벤트
+    selectAddress: (data: any) => {
+      setOpenPostcode(false);
+    },
+  };
   useEffect(() => {
     // update
     customAxios.get(`house/${id}`).then((res) => {
@@ -113,11 +130,24 @@ function HouseOffering() {
 
   return (
     <div className="w-full">
+      <PinkButton onClick={onClick} text="저장"></PinkButton>
       <div className="flex flex-row justify-center">
         제목:
         <input className="ml-4" onChange={onChangeTitle} value={title} />
       </div>
       <div className="flex justify-between mt-5">
+        주소:
+        <input onClick={handle.clickButton} />
+        {openPostcode && (
+          <DaumPostcode
+            onComplete={handle.selectAddress} // 값을 선택할 경우 실행되는 이벤트
+            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
+          />
+        )}
+        <th>
+          <input type="text" id="address_kakao" name="address" readOnly />
+        </th>
         <div>
           <label>거래 형식: </label>
           <select onChange={onChangeTradeType} value={tradeType}>
@@ -197,8 +227,9 @@ function HouseOffering() {
           </div>
         </>
       )}
+      <Footer />
     </div>
   );
 }
 
-export default HouseOffering;
+export default HouseOfferingDetail;
