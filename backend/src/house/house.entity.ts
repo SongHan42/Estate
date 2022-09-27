@@ -6,9 +6,10 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { HouseType } from "./house-type.enum";
+import { HouseType, TradeType } from "./house-type.enum";
 import { User } from "src/user/user.entity";
-import { Grade } from "src/grade/grade.entity";
+import { LikeHouse } from "src/like-house/like-house.entity";
+import { Evaluation } from "src/evaluation/evaluation.entity";
 
 @Entity()
 export class House extends BaseEntity {
@@ -18,8 +19,19 @@ export class House extends BaseEntity {
   @Column()
   title: string;
 
+  @Column({ default: false })
+  isOffering: boolean;
+
   @Column()
-  type: HouseType;
+  address: string;
+
+  detailedAddress: string;
+
+  @Column()
+  tradeType: TradeType;
+
+  @Column()
+  houseType: HouseType;
 
   @Column({ default: 0 })
   area: number;
@@ -36,15 +48,26 @@ export class House extends BaseEntity {
   @Column({ default: 0 })
   maintenanceFee: number;
 
-  @Column({ default: false })
-  isBookmark: boolean;
+  @Column({ default: "" })
+  description: string;
+
+  @Column({ default: 0 })
+  floor: number;
+
+  @Column({ default: 0 })
+  roomNum: number;
 
   @Column({ default: "" })
-  memo: string;
-
-  @OneToMany((type) => Grade, (grade) => grade.house, { onDelete: "CASCADE" })
-  grade: Grade[];
+  img: string;
 
   @ManyToOne((type) => User, (user) => user.house, { onDelete: "CASCADE" })
   user: User;
+
+  @OneToMany((type) => LikeHouse, (likeHouse) => likeHouse.house, {
+    onDelete: "CASCADE",
+  })
+  likeHouse: LikeHouse;
+
+  @OneToMany((type) => Evaluation, (evaluation) => evaluation.house)
+  evaluation: Evaluation[];
 }
