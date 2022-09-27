@@ -202,7 +202,7 @@ function HouseOfferingDetail() {
         <label>m^2</label>
       </div>
       {tradeType === TradeEnum.DEALING ? (
-        <div className="mt-5">
+        <div className="">
           <label> 매매가: </label>
           <input
             className="w-20"
