@@ -9,8 +9,14 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { HouseListDto } from "./dto/house-list.dto";
 import { User } from "src/user/user.entity";
 import { HouseDto } from "./dto/house.dto";
-import { GradeService } from "src/grade/grade.service";
 import { Grade } from "src/grade/grade.entity";
+import { Evaluation } from "src/evaluation/evaluation.entity";
+import { EvaluationService } from "src/evaluation/evaluation.service";
+import { OfferingHouseListDto } from "./dto/offering-house-list.dto";
+import { CreateOfferingHouseDto } from "./dto/create-offering-house.dto";
+import { OfferingHouseDetailDto } from "./dto/offering-house-detail.dto";
+import { UpdateOfferingDto } from "./dto/update-offering.dto";
+import { join } from "path";
 
 @Injectable()
 export class HouseService {
@@ -21,32 +27,67 @@ export class HouseService {
     private userRepository: Repository<User>,
     @InjectRepository(Grade)
     private gradeRepository: Repository<Grade>,
-    private gradeService: GradeService,
+    @InjectRepository(Evaluation)
+    private evaluationRepository: Repository<Evaluation>,
+
+    private evaluationService: EvaluationService,
   ) {}
 
   async getUserHouseList(id: number): Promise<HouseListDto[]> {
+    const houses: House[] = await this.houseRepository.find({
+      where: { user: { id }, isOffering: false },
+    });
+
+    const houseList: HouseListDto[] = [];
+
+    for await (const house of houses) {
+      const evaluation: Evaluation = await this.evaluationRepository.findOne({
+        where: { house: { id: house.id } },
+      });
+
+      const grade: Grade[] = await this.gradeRepository.find({
+        where: { evaluation: { id: evaluation.id } },
+      });
+
+      houseList.push(new HouseListDto(house, grade, evaluation.isBookmark));
+    }
+    return houseList;
+  }
+
+  async postUserHouse(
+    id: number,
+    houseDto: HouseDto,
+    filenae: string,
+  ): Promise<void> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
+    if (houseDto.title === "") throw new BadRequestException(`title need!`);
+    if (houseDto.tradeType === null)
+      throw new BadRequestException(`type need!`);
 
-    const houses: House[] = await this.houseRepository.find({
-      where: {
-        user: {
-          id: id,
-        },
-      },
-      relations: ["grade"],
-      order: {
-        isBookmark: "DESC",
-        id: "ASC",
-      },
+    const house: House = this.houseRepository.create({
+      title: houseDto.title,
+      houseType: houseDto.houseType,
+      tradeType: houseDto.tradeType,
+      area: houseDto.area,
+      price: houseDto.price,
+      deposit: houseDto.deposit,
+      rent: houseDto.rent,
+      maintenanceFee: houseDto.maintenanceFee,
+      address: houseDto.address,
+      floor: houseDto.floor,
+      roomNum: houseDto.roomNum,
+      img: filenae,
+      user,
     });
+    await house.save();
 
-    const houseListDto: HouseListDto[] = [];
-    houses.forEach((house) => {
-      houseListDto.push(new HouseListDto(house));
-    });
-
-    return houseListDto;
+    await this.evaluationService.createEvaluation(
+      user,
+      house,
+      houseDto.memo,
+      houseDto.grade,
+    );
   }
 
   async getDetailUserHouse(id: number, houseId: number): Promise<House> {
@@ -55,72 +96,62 @@ export class HouseService {
     const house: House = await this.houseRepository.findOne({
       where: { id: houseId },
       relations: ["grade"],
-      order: {
-        grade: {
-          title: "ASC",
-        },
-      },
     });
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
     return house;
-  }
-
-  async postUserHouse(id: number, houseDto: HouseDto): Promise<void> {
-    const user: User = await this.userRepository.findOneById(id);
-    if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-    if (houseDto.title === "") throw new BadRequestException(`title need!`);
-    if (houseDto.type === null) throw new BadRequestException(`type need!`);
-
-    const house: House = this.houseRepository.create({
-      title: houseDto.title,
-      type: houseDto.type,
-      area: houseDto.area,
-      price: houseDto.price,
-      deposit: houseDto.deposit,
-      rent: houseDto.rent,
-      maintenanceFee: houseDto.maintenanceFee,
-      memo: houseDto.memo,
-      user,
-    });
-    await house.save();
-
-    await this.gradeService.createDefaultGrade(id, house, houseDto.grade);
   }
 
   async editUserHouse(
     id: number,
     houseId: number,
     houseDto: HouseDto,
+    filename: string,
   ): Promise<void> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-    const house: House = await this.houseRepository.findOneById(houseId);
+    const house: House = await this.houseRepository.findOne({
+      where: { id: houseId },
+      relations: ["evaluation"],
+    });
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
     if (houseDto.title === "") throw new BadRequestException(`title need!`);
-    if (houseDto.type === null) throw new BadRequestException(`type need!`);
+    if (houseDto.tradeType === null)
+      throw new BadRequestException(`type need!`);
 
     for await (const gradeDto of houseDto.grade) {
-      const find: Grade = await this.gradeRepository.findOneById(gradeDto.id);
+      const find: Grade = await this.gradeRepository.findOne({
+        where: { id: gradeDto.id },
+      });
       if (find) {
         find.title = gradeDto.title;
         find.star = gradeDto.star;
         await find.save();
       }
     }
-    const pushGrade: Grade[] = await this.gradeRepository.findBy({
-      house: { id: house.id },
-    });
+
+    if (filename) {
+      const fs = require("fs");
+
+      const path = join(__dirname, "..", "..", "img");
+      fs.unlink(path, () => {});
+      house.img = filename;
+    }
     house.title = houseDto.title;
-    house.type = houseDto.type;
+    house.houseType = houseDto.houseType;
+    house.tradeType = houseDto.tradeType;
     house.area = houseDto.area;
     house.price = houseDto.price;
     house.deposit = houseDto.deposit;
     house.rent = houseDto.rent;
     house.maintenanceFee = houseDto.maintenanceFee;
-    house.grade = pushGrade;
-    house.memo = houseDto.memo;
+    house.address = houseDto.address;
+    house.floor = houseDto.floor;
+    house.roomNum = houseDto.roomNum;
+    house.evaluation[0].memo = houseDto.memo;
     await house.save();
   }
+
+  /////////////// offering
 
   async deleteUserHouse(id: number, houseId: number): Promise<void> {
     const user: User = await this.userRepository.findOneById(id);
@@ -129,19 +160,103 @@ export class HouseService {
       where: { id: houseId, user: { id: user.id } },
     });
     if (!house) throw new NotFoundException(`삭제할 house를 찾을 수 없음`);
+
+    const fs = require("fs");
+    const path = join(__dirname, "..", "..", "img", house.img);
+    fs.unlink(path, () => {});
+
     await this.houseRepository.remove(house);
   }
 
-  async updateBookmark(
-    id: number,
-    houseId: number,
-  ): Promise<{ isSuccess: boolean }> {
-    const house: House = await this.houseRepository.findOne({
-      where: { id: houseId, user: { id } },
+  async getOfferingHouse(id: number): Promise<OfferingHouseListDto[]> {
+    const houses: House[] = await this.houseRepository.find({
+      where: { user: { id }, isOffering: true },
     });
-    if (!house) throw new NotFoundException();
-    house.isBookmark = !house.isBookmark;
+
+    const offeringHoustListDto: OfferingHouseListDto[] = [];
+    houses.forEach((house) => {
+      offeringHoustListDto.push(new OfferingHouseListDto(house));
+    });
+    return offeringHoustListDto;
+  }
+
+  async createOfferingHouse(
+    id: number,
+    createOfferingHouseDto: CreateOfferingHouseDto,
+    filename: string,
+  ) {
+    const house: House = this.houseRepository.create({
+      houseType: createOfferingHouseDto.houseType,
+      tradeType: createOfferingHouseDto.tradeType,
+      area: createOfferingHouseDto.area,
+      price: createOfferingHouseDto.price,
+      deposit: createOfferingHouseDto.deposit,
+      rent: createOfferingHouseDto.rent,
+      maintenanceFee: createOfferingHouseDto.maintenanceFee,
+      address: createOfferingHouseDto.address,
+      floor: createOfferingHouseDto.floor,
+      roomNum: createOfferingHouseDto.roomNum,
+      description: createOfferingHouseDto.description,
+      img: filename,
+    });
     await house.save();
-    return { isSuccess: true };
+  }
+
+  async getOfferingDetail(id: number): Promise<OfferingHouseDetailDto> {
+    const house: House = await this.houseRepository.findOne({ where: { id } });
+    const evaluation: Evaluation[] = await this.evaluationRepository.find({
+      where: { house: { id } },
+      relations: ["user", "grade"],
+    });
+
+    const offeringHouseDetailDto: OfferingHouseDetailDto =
+      new OfferingHouseDetailDto(house, evaluation);
+    return offeringHouseDetailDto;
+  }
+
+  async updateOffering(
+    id: number,
+    updateOfferingDto: UpdateOfferingDto,
+    filename: string,
+  ): Promise<void> {
+    const house: House = await this.houseRepository.findOne({
+      where: { id },
+    });
+    if (filename) {
+      const fs = require("fs");
+
+      const path = join(__dirname, "..", "..", "img", house.img);
+      fs.unlink(path, () => {});
+      house.img = filename;
+    }
+
+    house.houseType = updateOfferingDto.houseType;
+    house.tradeType = updateOfferingDto.tradeType;
+    house.area = updateOfferingDto.area;
+    house.price = updateOfferingDto.price;
+    house.deposit = updateOfferingDto.deposit;
+    house.rent = updateOfferingDto.rent;
+    house.maintenanceFee = updateOfferingDto.maintenanceFee;
+    house.address = updateOfferingDto.address;
+    house.floor = updateOfferingDto.floor;
+    house.roomNum = updateOfferingDto.roomNum;
+    house.description = updateOfferingDto.description;
+    await house.save();
+  }
+
+  async deleteOffering(id: number): Promise<void> {
+    const house: House = await this.houseRepository.findOne({ where: { id } });
+
+    const fs = require("fs");
+
+    const path = join(__dirname, "..", "..", "img", house.img);
+    fs.unlink(path, () => {});
+
+    await house.remove();
+  }
+  ////////////////
+
+  async updateBookmark(id: number, houseId: number) {
+    await this.evaluationService.updateBookmark(id, houseId);
   }
 }

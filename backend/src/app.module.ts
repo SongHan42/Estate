@@ -11,6 +11,8 @@ import { AuthModule } from "./auth/auth.module";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { DatabaseModule } from "./database/database.module";
+import { EvaluationModule } from "./evaluation/evaluation.module";
+import { LikeHouseModule } from "./like-house/like-house.module";
 
 @Module({
   imports: [
@@ -48,6 +50,8 @@ import { DatabaseModule } from "./database/database.module";
     ImportanceModule,
     AuthModule,
     DatabaseModule,
+    EvaluationModule,
+    LikeHouseModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

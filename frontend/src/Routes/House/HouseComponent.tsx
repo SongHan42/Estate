@@ -82,7 +82,15 @@ function HouseComponent({ house, setHouses }: PropsType) {
                 {house.lowAvg}
               </p>
             </div>
-            <img className="w-1/3 m-3 right-0" src="/img/gray_box.png" alt="" />
+            <img
+              className="w-1/3 m-3 right-0"
+              src={
+                house.img
+                  ? process.env.REACT_APP_API_URL + house.img
+                  : "/img/gray_box.png"
+              }
+              alt=""
+            />
           </div>
         </Link>
       </div>

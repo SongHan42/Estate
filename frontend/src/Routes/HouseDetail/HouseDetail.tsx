@@ -5,6 +5,7 @@ import { HouseEnum, TradeEnum } from "../House/HouseList";
 import { customAxios } from "../../function/customAxios";
 import PinkButton from "../../Components/PinkButton";
 import Footer from "../../Components/Footer";
+import ImgButton from "../../Components/ImgButton";
 
 export type GradeType = {
   id: number;
@@ -23,6 +24,9 @@ function HouseDetail() {
   const [area, setArea] = useState(0);
   const [tradeType, setTradeType] = useState<TradeEnum>(TradeEnum.DEALING);
   const [houseType, setHouseType] = useState<HouseEnum>(HouseEnum.APT);
+
+  const [imgUrl, setImgUrl] = useState("/img/gray_box.png");
+  const [imgFile, setImgFile] = useState<File>();
 
   const [price, setPrice] = useState(0);
   const [toggles, setToggles] = useState([true, true, true, true]);
@@ -47,6 +51,8 @@ function HouseDetail() {
         setTradeType(res.data.type);
         setGrades(res.data.grade);
         setMemo(res.data.memo);
+        if (res.data.img)
+          setImgUrl(process.env.REACT_APP_API_URL + res.data.img);
       });
     }
   }, []);
@@ -91,34 +97,34 @@ function HouseDetail() {
     if (title === "") {
       return alert("제목을 입력해주세요");
     }
+    const formData = new FormData();
+
+    if (imgFile) formData.append("img", imgFile);
+    const data = JSON.stringify({
+      title,
+      tradeType,
+      houseType,
+      area,
+      price,
+      deposit,
+      rent,
+      maintenanceFee,
+      memo,
+      grade: grades,
+    });
+    formData.append("data", data);
     if (id === "0") {
       customAxios
-        .post("house", {
-          title,
-          type: tradeType,
-          area,
-          price,
-          deposit,
-          rent,
-          maintenanceFee,
-          memo,
-          grade: grades,
+        .post("house", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         })
         .then(() => {
           navigate("/house");
         });
     } else {
       customAxios
-        .patch(`house/${id}`, {
-          title,
-          type: tradeType,
-          area,
-          price,
-          deposit,
-          rent,
-          maintenanceFee,
-          memo,
-          grade: grades,
+        .patch(`house/${id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         })
         .then(() => {
           navigate("/house");
@@ -138,6 +144,11 @@ function HouseDetail() {
       <PinkButton onClick={onClick} text="저장"></PinkButton>
       <div className="w-full">
         <div className="flex flex-row justify-center">
+          <ImgButton
+            imgUrl={imgUrl}
+            setImgFile={setImgFile}
+            setImgUrl={setImgUrl}
+          />
           제목:
           <input className="ml-4" onChange={onChangeTitle} value={title} />
         </div>

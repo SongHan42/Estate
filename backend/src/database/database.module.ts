@@ -6,6 +6,8 @@ import { User } from "src/user/user.entity";
 import { Importance } from "src/importance/importance.entity";
 import { House } from "src/house/house.entity";
 import { Grade } from "src/grade/grade.entity";
+import { LikeHouse } from "src/like-house/like-house.entity";
+import { Evaluation } from "src/evaluation/evaluation.entity";
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { Grade } from "src/grade/grade.entity";
         username: configService.get("DB_USERNAME"),
         password: configService.get("DB_PASSWORD"),
         database: configService.get("DB_NAME"),
-        entities: [User, Importance, House, Grade],
+        entities: [User, Importance, House, Grade, LikeHouse, Evaluation],
         synchronize: true,
       }),
     }),

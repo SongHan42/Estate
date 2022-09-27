@@ -1,8 +1,7 @@
-import { GradeDto } from "src/grade/grade.dto";
 import { HouseType, TradeType } from "../house-type.enum";
 
-export class HouseDto {
-  title: string;
+export class UpdateOfferingDto {
+  id: number;
   houseType: HouseType;
   tradeType: TradeType;
   area: number;
@@ -13,6 +12,5 @@ export class HouseDto {
   address: string;
   floor: number;
   roomNum: number;
-  memo: string;
-  grade: GradeDto[]; //테스트필요
+  description: string;
 }

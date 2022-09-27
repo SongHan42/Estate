@@ -6,14 +6,28 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from "@nestjs/common";
 import { HouseService } from "./house.service";
 import { HouseListDto } from "./dto/house-list.dto";
 import { GetUserId } from "src/auth/get-userId.decorator";
 import { HouseDto } from "./dto/house.dto";
 import { House } from "./house.entity";
+import { OfferingHouseListDto } from "./dto/offering-house-list.dto";
+import { CreateOfferingHouseDto } from "./dto/create-offering-house.dto";
+import { UpdateOfferingDto } from "./dto/update-offering.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+
+const storage = diskStorage({
+  destination: "./img",
+  filename: (req, file, cb) => {
+    const filename = Date.now() + file.originalname;
+    cb(null, filename);
+  },
+});
 
 @Controller("house")
 export class HouseController {
@@ -22,6 +36,45 @@ export class HouseController {
   @Get()
   getUserHouseList(@GetUserId() id: number): Promise<HouseListDto[]> {
     return this.houseService.getUserHouseList(id);
+  }
+
+  @Get("/offering")
+  getOfferingHouse(@GetUserId() id: number): Promise<OfferingHouseListDto[]> {
+    return this.houseService.getOfferingHouse(id);
+  }
+
+  @Post("/offering")
+  @UseInterceptors(FileInterceptor("img", { storage }))
+  createOfferingHouse(
+    @GetUserId() id: number,
+    createOfferingHouseDto: CreateOfferingHouseDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    this.houseService.createOfferingHouse(
+      id,
+      createOfferingHouseDto,
+      file.filename,
+    );
+  }
+
+  @Get("/offering/:houseId")
+  getOfferingDetail(@Param("houseId") id: number) {
+    this.houseService.getOfferingDetail(id);
+  }
+
+  @Patch("/offering/:houseId")
+  @UseInterceptors(FileInterceptor("img", { storage }))
+  updateOffering(
+    @Param("houseId") id,
+    updateOfferingDto: UpdateOfferingDto,
+    @UploadedFile() file: Express.Multer.File,
+  ): void {
+    this.houseService.updateOffering(id, updateOfferingDto, file.filename);
+  }
+
+  @Delete("/offering/:houseId")
+  deleteOffering(@Param("houseId") id: number): void {
+    this.houseService.deleteOffering(id);
   }
 
   @Get("/:houseId")
@@ -33,20 +86,29 @@ export class HouseController {
   }
 
   @Post()
+  @UseInterceptors(FileInterceptor("img", { storage }))
   postUserHouse(
     @GetUserId() id: number,
     @Body() houseDto: HouseDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<void> {
-    return this.houseService.postUserHouse(id, houseDto);
+    return this.houseService.postUserHouse(id, houseDto, file.filename);
   }
 
   @Patch("/:houseId")
+  @UseInterceptors(FileInterceptor("img", { storage }))
   editUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
     @Body() houseDto: HouseDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<void> {
-    return this.houseService.editUserHouse(id, houseId, houseDto);
+    return this.houseService.editUserHouse(
+      id,
+      houseId,
+      houseDto,
+      file.filename,
+    );
   }
 
   @Delete("/:houseId")
@@ -61,7 +123,7 @@ export class HouseController {
   updateBookmark(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
-  ): Promise<{ isSuccess: boolean }> {
+  ): Promise<void> {
     return this.houseService.updateBookmark(id, houseId);
   }
 }
