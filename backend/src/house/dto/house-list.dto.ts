@@ -27,7 +27,7 @@ export class HouseListDto {
       } else if (grade.rating === ImportanceRating.MIDDLE) {
         this.middleAvg += grade.star;
       } else if (grade.rating === ImportanceRating.LOW) {
-        this.lowAvg += grade.star;
+        this.lowAvg += Number(grade.star);
       }
     });
     this.highAvg = this.highAvg
