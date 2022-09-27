@@ -13,7 +13,8 @@ async function bootstrap() {
   const port = configService.get("NODE_SERVER_PORT");
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(port);
   app.useStaticAssets(join(__dirname, "..", "img"));
+  await app.listen(port);
 }
+
 bootstrap();

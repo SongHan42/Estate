@@ -17,6 +17,7 @@ import { CreateOfferingHouseDto } from "./dto/create-offering-house.dto";
 import { OfferingHouseDetailDto } from "./dto/offering-house-detail.dto";
 import { UpdateOfferingDto } from "./dto/update-offering.dto";
 import { join } from "path";
+import { HouseDetailDto } from "./dto/house-detail.dto";
 
 @Injectable()
 export class HouseService {
@@ -90,15 +91,22 @@ export class HouseService {
     );
   }
 
-  async getDetailUserHouse(id: number, houseId: number): Promise<House> {
-    const user: User = await this.userRepository.findOneById(id);
+  async getDetailUserHouse(
+    id: number,
+    houseId: number,
+  ): Promise<HouseDetailDto> {
+    const user: User = await this.userRepository.findOne({ where: { id } });
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     const house: House = await this.houseRepository.findOne({
       where: { id: houseId },
-      relations: ["grade"],
+      relations: ["evaluation", "evaluation.grade"],
     });
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
-    return house;
+    const houseDetailDto: HouseDetailDto = new HouseDetailDto(
+      house,
+      house.evaluation[0].grade,
+    );
+    return houseDetailDto;
   }
 
   async editUserHouse(
