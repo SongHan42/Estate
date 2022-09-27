@@ -38,6 +38,7 @@ export type HouseType = {
   roomNum: number;
   isOffering: boolean;
   discription: string;
+  img: string;
 };
 
 function HouseList() {
@@ -45,6 +46,7 @@ function HouseList() {
 
   useEffect(() => {
     customAxios.get("house").then((res) => {
+      console.log(res.data);
       setHouses(res.data);
     });
   }, []);

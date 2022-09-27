@@ -50,7 +50,8 @@ function HouseDetail() {
         setTradeType(res.data.type);
         setGrades(res.data.grade);
         setMemo(res.data.memo);
-        setImgUrl(process.env.REACT_APP_API_URL + res.data.img);
+        if (res.data.img)
+          setImgUrl(process.env.REACT_APP_API_URL + res.data.img);
       });
     }
   }, []);
