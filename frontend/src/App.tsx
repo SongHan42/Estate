@@ -7,6 +7,7 @@ import ImportanceList from "./Routes/Importance/ImportanceList";
 import HouseDetail from "./Routes/HouseDetail/HouseDetail";
 import Setting from "./Routes/Setting/Setting";
 import User from "./Routes/User/User";
+import HouseOffering from "./Routes/HouseOffering/HouseOffering";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/house/:id" element={<HouseDetail />}></Route>
             <Route path="/setting" element={<Setting />}></Route>
             <Route path="/user" element={<User />}></Route>
+            <Route path="/house/offering" element={<HouseOffering />}></Route>
           </Routes>
         </div>
       </div>
