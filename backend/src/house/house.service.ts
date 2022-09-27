@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { House } from "./house.entity";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { HouseListDto } from "./dto/house-list.dto";
 import { User } from "src/user/user.entity";
@@ -18,6 +18,7 @@ import { OfferingHouseDetailDto } from "./dto/offering-house-detail.dto";
 import { UpdateOfferingDto } from "./dto/update-offering.dto";
 import { join } from "path";
 import { HouseDetailDto } from "./dto/house-detail.dto";
+import { SearchHouseDto } from "./dto/search-house.dto";
 
 @Injectable()
 export class HouseService {
@@ -58,7 +59,7 @@ export class HouseService {
   async postUserHouse(
     id: number,
     houseDto: HouseDto,
-    filenae: string,
+    filename: string,
   ): Promise<void> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
@@ -78,7 +79,7 @@ export class HouseService {
       address: houseDto.address,
       floor: houseDto.floor,
       roomNum: houseDto.roomNum,
-      img: filenae,
+      img: filename,
       user,
     });
     await house.save();
@@ -263,6 +264,19 @@ export class HouseService {
     await house.remove();
   }
   ////////////////
+
+  async searchHouse(id: number, address: string): Promise<SearchHouseDto[]> {
+    const houses: House[] = await this.houseRepository.find({
+      where: { address: Like(`%${address}%`), isOffering: true },
+      //      relations: ["likeHouse"],
+    });
+
+    const searchHouseDto: SearchHouseDto[] = [];
+    houses.forEach((house) => {
+      searchHouseDto.push(house);
+    });
+    return searchHouseDto;
+  }
 
   async updateBookmark(id: number, houseId: number) {
     await this.evaluationService.updateBookmark(id, houseId);

@@ -21,6 +21,8 @@ import { UpdateOfferingDto } from "./dto/update-offering.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { HouseDetailDto } from "./dto/house-detail.dto";
+import { SearchHouseDto } from "./dto/search-house.dto";
+import { identity } from "rxjs";
 
 const storage = diskStorage({
   destination: "./img",
@@ -124,6 +126,14 @@ export class HouseController {
     @Param("houseId", ParseIntPipe) houseId: number,
   ): Promise<void> {
     return this.houseService.deleteUserHouse(id, houseId);
+  }
+
+  @Get("/search/:address")
+  searchHouse(
+    @GetUserId() id: number,
+    @Param("address") address: string,
+  ): Promise<SearchHouseDto[]> {
+    return this.houseService.searchHouse(id, address);
   }
 
   @Patch("/bookmark/:houseId")
