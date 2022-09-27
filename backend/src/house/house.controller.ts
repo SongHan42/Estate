@@ -92,7 +92,9 @@ export class HouseController {
     @Body() houseDto: HouseDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<void> {
-    return this.houseService.postUserHouse(id, houseDto, file.filename);
+    if (file)
+      return this.houseService.postUserHouse(id, houseDto, file.filename);
+    else return this.houseService.postUserHouse(id, houseDto, "");
   }
 
   @Patch("/:houseId")
