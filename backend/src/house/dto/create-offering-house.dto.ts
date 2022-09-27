@@ -1,4 +1,5 @@
 export class CreateOfferingHouseDto {
+  title: string;
   houseType: number;
   tradeType: number;
   area: number;

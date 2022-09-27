@@ -50,14 +50,19 @@ export class HouseController {
   @UseInterceptors(FileInterceptor("img", { storage }))
   createOfferingHouse(
     @GetUserId() id: number,
+    @Body()
     createOfferingHouseDto: CreateOfferingHouseDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    this.houseService.createOfferingHouse(
-      id,
-      createOfferingHouseDto,
-      file.filename,
-    );
+    if (file) {
+      this.houseService.createOfferingHouse(
+        id,
+        createOfferingHouseDto,
+        file.filename,
+      );
+    } else {
+      this.houseService.createOfferingHouse(id, createOfferingHouseDto, "");
+    }
   }
 
   @Get("/offering/:houseId")
