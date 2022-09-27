@@ -8,6 +8,8 @@ import {
 import { House } from "src/house/house.entity";
 import { Importance } from "src/importance/importance.entity";
 import { Exclude } from "class-transformer";
+import { LikeHouse } from "src/like-house/like-house.entity";
+import { Evaluation } from "src/evaluation/evaluation.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -48,4 +50,15 @@ export class User extends BaseEntity {
     },
   )
   house: House[];
+
+  @OneToMany(
+    (type) => LikeHouse,
+    (likeHouse) => {
+      likeHouse.user;
+    },
+  )
+  likeHouse: LikeHouse[];
+
+  @OneToMany((type)=>Evaluation, (evaluation=>evaluation.user))
+  evaluation: Evaluation[];
 }
