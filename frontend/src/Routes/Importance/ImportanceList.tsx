@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ImportanceComponent from "./ImportanceComponent";
-import Button from "../../Components/Button";
 import { useNavigate } from "react-router-dom";
 import { customAxios } from "../../function/customAxios";
+import Footer from "../../Components/Footer";
 
 export enum RatingEnum {
   high,
@@ -66,25 +66,27 @@ function ImportanceList() {
   };
 
   return (
-    <div className="flex flex-col w-full items-center justify-center pb-10">
-      <h1 className="text-3xl">체크리스트 및 중요도 설정</h1>
-      {importances
-        ? importances.map((importance, index) => {
-            return (
-              <ImportanceComponent
-                key={index}
-                importance={importance}
-                index={index}
-                setImportances={setImportances}
-                setDeleteImportanceIds={setDeleteImportanceIds}
-              />
-            );
-          })
-        : null}
-      <button onClick={onAddClick}>
-        <img className="w-5 mt-5" src="img/plus.png" alt="plus" />
-      </button>
-      <Button style={"fixed bottom-0"} text="저장" onClick={onClick} />
+    <div>
+      <div className="flex flex-col w-full items-center justify-center pb-10">
+        <h1 className="text-3xl">체크리스트 및 중요도 설정</h1>
+        {importances
+          ? importances.map((importance, index) => {
+              return (
+                <ImportanceComponent
+                  key={index}
+                  importance={importance}
+                  index={index}
+                  setImportances={setImportances}
+                  setDeleteImportanceIds={setDeleteImportanceIds}
+                />
+              );
+            })
+          : null}
+        <button onClick={onAddClick}>
+          <img className="w-5 mt-5" src="img/plus.png" alt="plus" />
+        </button>
+      </div>
+      <Footer />
     </div>
   );
 }

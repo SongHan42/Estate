@@ -1,53 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import HouseDetailComponent from "./HouseDetailComponent";
-import Button from "../../Components/Button";
-import { HouseEnum, TradeEnum } from "../House/HouseList";
+import { useNavigate, useParams } from "react-router-dom";
+import Footer from "../../Components/Footer";
 import { customAxios } from "../../function/customAxios";
+import { HouseEnum, TradeEnum } from "../House/HouseList";
+import PinkButton from "../../Components/PinkButton";
+import DaumPostcode from "react-daum-postcode";
 
-export type GradeType = {
-  id: number;
-  title: string;
-  star: number;
-  rating: number;
-};
-
-function HouseDetail() {
+function HouseOfferingDetail() {
   const { id } = useParams();
-  const [grades, setGrades] = useState<GradeType[]>([]);
   const [title, setTitle] = useState("");
   const [deposit, setDeposit] = useState(0);
   const [rent, setRent] = useState(0);
   const [maintenanceFee, setMaintenanceFee] = useState(0);
   const [area, setArea] = useState(0);
   const [tradeType, setTradeType] = useState<TradeEnum>(TradeEnum.DEALING);
-  const [houseType, setHouseType] = useState<HouseEnum>(HouseEnum.APT);
-
   const [price, setPrice] = useState(0);
-  const [toggles, setToggles] = useState([true, true, true, true]);
-  const [memo, setMemo] = useState("");
+  const [discription, setDiscription] = useState("");
+  const [houseType, setHouseType] = useState<HouseEnum>(HouseEnum.APT);
+  const [address, setAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
+  const [openPostcode, setOpenPostcode] = useState(false);
   const navigate = useNavigate();
 
+  const handle = {
+    // 버튼 클릭 이벤트
+    clickButton: () => {
+      setOpenPostcode((current) => !current);
+      // window.open()
+    },
+
+    // 주소 선택 이벤트
+    selectAddress: (data: any) => {
+      setOpenPostcode(false);
+    },
+  };
   useEffect(() => {
-    if (id === "0") {
-      // first
-      customAxios.get("importance").then((res) => {
-        setGrades(res.data);
-      });
-    } else {
-      // update
-      customAxios.get(`house/${id}`).then((res) => {
-        setTitle(res.data.title);
-        setDeposit(res.data.deposit);
-        setMaintenanceFee(res.data.maintenanceFee);
-        setRent(res.data.rent);
-        setArea(res.data.area);
-        setPrice(res.data.price);
-        setTradeType(res.data.type);
-        setGrades(res.data.grade);
-        setMemo(res.data.memo);
-      });
-    }
+    // update
+    customAxios.get(`house/${id}`).then((res) => {
+      setTitle(res.data.title);
+      setDeposit(res.data.deposit);
+      setMaintenanceFee(res.data.maintenanceFee);
+      setRent(res.data.rent);
+      setArea(res.data.area);
+      setPrice(res.data.price);
+      setTradeType(res.data.type);
+      setDiscription(res.data.discription);
+    });
   }, []);
 
   const onChangeTradeType = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,16 +56,16 @@ function HouseDetail() {
     setHouseType(+e.target.value);
   };
 
-  const onChangeArea = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setArea(+e.target.value);
-  };
-
   const onChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(+e.target.value);
   };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+  };
+
+  const onChangeArea = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setArea(+e.target.value);
   };
 
   const onChangeDeposit = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,63 +80,74 @@ function HouseDetail() {
     setMaintenanceFee(+e.target.value);
   };
 
-  const onChangeMemo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMemo(e.target.value);
+  const onChangeDiscription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDiscription(e.target.value);
+  };
+
+  const onChangeAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
   };
 
   const onClick = () => {
-    if (title === "") {
-      return alert("제목을 입력해주세요");
-    }
+    if (address === "") return alert("주소를 입력하세요");
+    else if (tradeType === null) return alert("거래 형식을 설정하세요");
     if (id === "0") {
       customAxios
-        .post("house", {
+        .post("house/offering", {
           title,
-          type: tradeType,
+          tradeType: tradeType,
           area,
           price,
           deposit,
           rent,
           maintenanceFee,
-          memo,
-          grade: grades,
+          discription,
+          address,
+          housetype: houseType,
         })
         .then(() => {
-          navigate("/house");
+          navigate("/house/offering");
         });
     } else {
       customAxios
-        .patch(`house/${id}`, {
+        .patch(`house/offering/${id}`, {
           title,
-          type: tradeType,
+          tradeType: tradeType,
           area,
           price,
           deposit,
           rent,
           maintenanceFee,
-          memo,
-          grade: grades,
+          discription,
+          address,
+          housetype: houseType,
         })
         .then(() => {
-          navigate("/house");
+          navigate("/house/offering");
         });
     }
-  };
-
-  const onClickToggle = (idx: number) => {
-    setToggles((toggle) => {
-      toggle[idx] = !toggle[idx];
-      return [...toggle];
-    });
   };
 
   return (
     <div className="w-full">
+      <PinkButton onClick={onClick} text="저장"></PinkButton>
       <div className="flex flex-row justify-center">
         제목:
         <input className="ml-4" onChange={onChangeTitle} value={title} />
       </div>
       <div className="flex justify-between mt-5">
+        주소:
+        <input onClick={handle.clickButton} />
+        {openPostcode && (
+          <DaumPostcode
+            onComplete={handle.selectAddress} // 값을 선택할 경우 실행되는 이벤트
+            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
+          />
+        )}
+        <th>
+          <input type="text" id="address_kakao" name="address" readOnly />
+        </th>
         <div>
           <label>거래 형식: </label>
           <select onChange={onChangeTradeType} value={tradeType}>
@@ -218,62 +227,9 @@ function HouseDetail() {
           </div>
         </>
       )}
-      <ul className="w-full">
-        <li className="text-xl" onClick={() => onClickToggle(3)}>
-          {toggles[3] ? "▼" : "▶"} 메모
-        </li>
-        {toggles[3] ? (
-          <input className="w-full" onChange={onChangeMemo} value={memo} />
-        ) : null}
-        <li className="text-xl" onClick={() => onClickToggle(0)}>
-          {toggles[0] ? "▼" : "▶"} 중요도 상
-        </li>
-        {toggles[0]
-          ? grades.map((grade) => {
-              if (grade.rating === 0)
-                return (
-                  <HouseDetailComponent
-                    key={grade.id}
-                    grade={grade}
-                    setGrades={setGrades}
-                  />
-                );
-            })
-          : null}
-        <li className="text-xl" onClick={() => onClickToggle(1)}>
-          {toggles[1] ? "▼" : "▶"} 중요도 중
-        </li>
-        {toggles[1]
-          ? grades.map((grade) => {
-              if (grade.rating === 1)
-                return (
-                  <HouseDetailComponent
-                    key={grade.id}
-                    grade={grade}
-                    setGrades={setGrades}
-                  />
-                );
-            })
-          : null}
-        <li className="text-xl" onClick={() => onClickToggle(2)}>
-          ︎{toggles[2] ? "▼" : "▶"} 중요도 하
-        </li>
-        {toggles[2]
-          ? grades.map((grade) => {
-              if (grade.rating === 2)
-                return (
-                  <HouseDetailComponent
-                    key={grade.id}
-                    grade={grade}
-                    setGrades={setGrades}
-                  />
-                );
-            })
-          : null}
-      </ul>
-      <Button text="저장" onClick={onClick} />
+      <Footer />
     </div>
   );
 }
 
-export default HouseDetail;
+export default HouseOfferingDetail;
