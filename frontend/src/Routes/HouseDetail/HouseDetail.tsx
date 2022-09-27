@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import HouseDetailComponent from "./HouseDetailComponent";
-import Button from "../../Components/Button";
 import { HouseEnum, TradeEnum } from "../House/HouseList";
 import { customAxios } from "../../function/customAxios";
+import PinkButton from "../../Components/PinkButton";
+import Footer from "../../Components/Footer";
 
 export type GradeType = {
   id: number;
@@ -133,145 +134,148 @@ function HouseDetail() {
   };
 
   return (
-    <div className="w-full">
-      <div className="flex flex-row justify-center">
-        제목:
-        <input className="ml-4" onChange={onChangeTitle} value={title} />
-      </div>
-      <div className="flex justify-between mt-5">
-        <div>
-          <label>거래 형식: </label>
-          <select onChange={onChangeTradeType} value={tradeType}>
-            {["매매", "전세", "월세"].map((tradetype, index) => {
-              return (
-                <option key={index} value={index}>
-                  {tradetype}
-                </option>
-              );
-            })}
-          </select>
-          <label>주거 형식: </label>
-          <select onChange={onChangeHouseType} value={houseType}>
-            {["아파트", "오피스텔", "빌라", "주택", "기타"].map(
-              (housetype, index) => {
+    <div>
+      <PinkButton onClick={onClick} text="저장"></PinkButton>
+      <div className="w-full">
+        <div className="flex flex-row justify-center">
+          제목:
+          <input className="ml-4" onChange={onChangeTitle} value={title} />
+        </div>
+        <div className="flex justify-between mt-5">
+          <div>
+            <label>거래 형식: </label>
+            <select onChange={onChangeTradeType} value={tradeType}>
+              {["매매", "전세", "월세"].map((tradetype, index) => {
                 return (
                   <option key={index} value={index}>
-                    {housetype}
+                    {tradetype}
                   </option>
                 );
-              },
-            )}
-          </select>
-        </div>
-        <div>
-          <label> 면적: </label>
-          <input
-            className="w-20"
-            type="number"
-            onChange={onChangeArea}
-            value={area}
-          />{" "}
-          <label>m^2</label>
-        </div>
-      </div>
-      {tradeType === TradeEnum.DEALING ? (
-        <div className="text-center mt-5">
-          <p>매매가</p>
-          <input
-            className="w-20"
-            type="number"
-            onChange={onChangePrice}
-            value={price}
-          />
-          <label>만원 </label>
-        </div>
-      ) : (
-        <>
-          <div className="flex justify-between mt-5">
-            <div className="text-center">
-              <p>보증금(만원)</p>
-              <input
-                className="w-20"
-                type="number"
-                onChange={onChangeDeposit}
-                value={deposit}
-              />
-            </div>
-            <div className="text-center">
-              <p>월세(만원)</p>
-              <input
-                className="w-20"
-                type="number"
-                onChange={onChangeRent}
-                value={rent}
-              />
-            </div>
-            <div className="text-center">
-              <p>관리비(만원)</p>
-              <input
-                className="w-20"
-                type="number"
-                onChange={onChangeMaintenanceFee}
-                value={maintenanceFee}
-              />
-            </div>
+              })}
+            </select>
+            <label>주거 형식: </label>
+            <select onChange={onChangeHouseType} value={houseType}>
+              {["아파트", "오피스텔", "빌라", "주택", "기타"].map(
+                (housetype, index) => {
+                  return (
+                    <option key={index} value={index}>
+                      {housetype}
+                    </option>
+                  );
+                },
+              )}
+            </select>
           </div>
-        </>
-      )}
-      <ul className="w-full">
-        <li className="text-xl" onClick={() => onClickToggle(3)}>
-          {toggles[3] ? "▼" : "▶"} 메모
-        </li>
-        {toggles[3] ? (
-          <input className="w-full" onChange={onChangeMemo} value={memo} />
-        ) : null}
-        <li className="text-xl" onClick={() => onClickToggle(0)}>
-          {toggles[0] ? "▼" : "▶"} 중요도 상
-        </li>
-        {toggles[0]
-          ? grades.map((grade) => {
-              if (grade.rating === 0)
-                return (
-                  <HouseDetailComponent
-                    key={grade.id}
-                    grade={grade}
-                    setGrades={setGrades}
-                  />
-                );
-            })
-          : null}
-        <li className="text-xl" onClick={() => onClickToggle(1)}>
-          {toggles[1] ? "▼" : "▶"} 중요도 중
-        </li>
-        {toggles[1]
-          ? grades.map((grade) => {
-              if (grade.rating === 1)
-                return (
-                  <HouseDetailComponent
-                    key={grade.id}
-                    grade={grade}
-                    setGrades={setGrades}
-                  />
-                );
-            })
-          : null}
-        <li className="text-xl" onClick={() => onClickToggle(2)}>
-          ︎{toggles[2] ? "▼" : "▶"} 중요도 하
-        </li>
-        {toggles[2]
-          ? grades.map((grade) => {
-              if (grade.rating === 2)
-                return (
-                  <HouseDetailComponent
-                    key={grade.id}
-                    grade={grade}
-                    setGrades={setGrades}
-                  />
-                );
-            })
-          : null}
-      </ul>
-      <Button text="저장" onClick={onClick} />
+          <div>
+            <label> 면적: </label>
+            <input
+              className="w-20"
+              type="number"
+              onChange={onChangeArea}
+              value={area}
+            />{" "}
+            <label>m^2</label>
+          </div>
+        </div>
+        {tradeType === TradeEnum.DEALING ? (
+          <div className="text-center mt-5">
+            <p>매매가</p>
+            <input
+              className="w-20"
+              type="number"
+              onChange={onChangePrice}
+              value={price}
+            />
+            <label>만원 </label>
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-between mt-5">
+              <div className="text-center">
+                <p>보증금(만원)</p>
+                <input
+                  className="w-20"
+                  type="number"
+                  onChange={onChangeDeposit}
+                  value={deposit}
+                />
+              </div>
+              <div className="text-center">
+                <p>월세(만원)</p>
+                <input
+                  className="w-20"
+                  type="number"
+                  onChange={onChangeRent}
+                  value={rent}
+                />
+              </div>
+              <div className="text-center">
+                <p>관리비(만원)</p>
+                <input
+                  className="w-20"
+                  type="number"
+                  onChange={onChangeMaintenanceFee}
+                  value={maintenanceFee}
+                />
+              </div>
+            </div>
+          </>
+        )}
+        <ul className="w-full">
+          <li className="text-xl" onClick={() => onClickToggle(3)}>
+            {toggles[3] ? "▼" : "▶"} 메모
+          </li>
+          {toggles[3] ? (
+            <input className="w-full" onChange={onChangeMemo} value={memo} />
+          ) : null}
+          <li className="text-xl" onClick={() => onClickToggle(0)}>
+            {toggles[0] ? "▼" : "▶"} 중요도 상
+          </li>
+          {toggles[0]
+            ? grades.map((grade) => {
+                if (grade.rating === 0)
+                  return (
+                    <HouseDetailComponent
+                      key={grade.id}
+                      grade={grade}
+                      setGrades={setGrades}
+                    />
+                  );
+              })
+            : null}
+          <li className="text-xl" onClick={() => onClickToggle(1)}>
+            {toggles[1] ? "▼" : "▶"} 중요도 중
+          </li>
+          {toggles[1]
+            ? grades.map((grade) => {
+                if (grade.rating === 1)
+                  return (
+                    <HouseDetailComponent
+                      key={grade.id}
+                      grade={grade}
+                      setGrades={setGrades}
+                    />
+                  );
+              })
+            : null}
+          <li className="text-xl" onClick={() => onClickToggle(2)}>
+            ︎{toggles[2] ? "▼" : "▶"} 중요도 하
+          </li>
+          {toggles[2]
+            ? grades.map((grade) => {
+                if (grade.rating === 2)
+                  return (
+                    <HouseDetailComponent
+                      key={grade.id}
+                      grade={grade}
+                      setGrades={setGrades}
+                    />
+                  );
+              })
+            : null}
+        </ul>
+        <Footer />
+      </div>
     </div>
   );
 }
