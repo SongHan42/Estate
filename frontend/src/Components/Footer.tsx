@@ -18,7 +18,7 @@ function Footer() {
           <img className="w-9 items-center" src="/img/white_heart.png" alt="" />
         </button>
       </Link>
-      <Link to="/">
+      <Link to="/house/search">
         <button>
           <img
             className="w-8 items-center "

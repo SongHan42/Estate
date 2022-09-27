@@ -10,6 +10,7 @@ import User from "./Routes/User/User";
 import HouseOfferingDetail from "./Routes/HouseOfferingDetail/HouseOfferingDetail";
 import HouseOfferingList from "./Routes/HouseOffering/HouseOfferingList";
 import LikeList from "./Routes/Like/LikeList";
+import Search from "./Routes/Search/Search";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               element={<HouseOfferingDetail />}
             ></Route>
             <Route path="/like" element={<LikeList />}></Route>
+            <Route path="/house/search" element={<Search />}></Route>
           </Routes>
         </div>
       </div>
