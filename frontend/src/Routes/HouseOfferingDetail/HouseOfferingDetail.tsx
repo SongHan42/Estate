@@ -4,7 +4,7 @@ import Footer from "../../Components/Footer";
 import { customAxios } from "../../function/customAxios";
 import { HouseEnum, TradeEnum } from "../House/HouseList";
 import PinkButton from "../../Components/PinkButton";
-import DaumPostcode from "react-daum-postcode";
+import Post from "./PostComponent";
 
 function HouseOfferingDetail() {
   const { id } = useParams();
@@ -19,21 +19,24 @@ function HouseOfferingDetail() {
   const [houseType, setHouseType] = useState<HouseEnum>(HouseEnum.APT);
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-  const [openPostcode, setOpenPostcode] = useState(false);
+  const [popup, setPopup] = useState<boolean>(false);
+  const [enroll_company, setEnroll_company] = useState({
+    address: "",
+  });
+
   const navigate = useNavigate();
 
-  const handle = {
-    // 버튼 클릭 이벤트
-    clickButton: () => {
-      setOpenPostcode((current) => !current);
-      // window.open()
-    },
-
-    // 주소 선택 이벤트
-    selectAddress: (data: any) => {
-      setOpenPostcode(false);
-    },
+  const handleInput = (e) => {
+    setEnroll_company({
+      ...enroll_company,
+      [e.target.name]: e.target.value,
+    });
   };
+
+  const handleComplete = () => {
+    setPopup(!popup);
+  };
+
   useEffect(() => {
     // update
     customAxios.get(`house/${id}`).then((res) => {
@@ -45,8 +48,14 @@ function HouseOfferingDetail() {
       setPrice(res.data.price);
       setTradeType(res.data.type);
       setDiscription(res.data.discription);
+      setAddressDetail(res.data.addressDetail);
+      setAddress(res.data.address);
     });
   }, []);
+
+  useEffect(() => {
+    setAddress(enroll_company.address);
+  }, [enroll_company]);
 
   const onChangeTradeType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTradeType(+e.target.value);
@@ -84,8 +93,8 @@ function HouseOfferingDetail() {
     setDiscription(e.target.value);
   };
 
-  const onChangeAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value);
+  const onChangeAddressDetail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressDetail(e.target.value);
   };
 
   const onClick = () => {
@@ -103,6 +112,7 @@ function HouseOfferingDetail() {
           maintenanceFee,
           discription,
           address,
+          addressDetail,
           housetype: houseType,
         })
         .then(() => {
@@ -120,6 +130,7 @@ function HouseOfferingDetail() {
           maintenanceFee,
           discription,
           address,
+          addressDetail,
           housetype: houseType,
         })
         .then(() => {
@@ -135,19 +146,28 @@ function HouseOfferingDetail() {
         제목:
         <input className="ml-4" onChange={onChangeTitle} value={title} />
       </div>
-      <div className="flex justify-between mt-5">
+      <div className="justify-between mt-5">
         주소:
-        <input onClick={handle.clickButton} />
-        {openPostcode && (
-          <DaumPostcode
-            onComplete={handle.selectAddress} // 값을 선택할 경우 실행되는 이벤트
-            autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
-            defaultQuery="" // 팝업을 열때 기본적으로 입력되는 검색어
-          />
+        <input
+          className="user_enroll_text"
+          type="text"
+          required={true}
+          name="address"
+          onChange={handleInput}
+          value={enroll_company.address}
+          onClick={handleComplete}
+        />
+        {popup && (
+          <Post company={enroll_company} setcompany={setEnroll_company} />
         )}
-        <th>
-          <input type="text" id="address_kakao" name="address" readOnly />
-        </th>
+        <div>
+          상세주소:
+          <input
+            type="text"
+            onChange={onChangeAddressDetail}
+            value={addressDetail}
+          />
+        </div>
         <div>
           <label>거래 형식: </label>
           <select onChange={onChangeTradeType} value={tradeType}>
@@ -172,20 +192,18 @@ function HouseOfferingDetail() {
             )}
           </select>
         </div>
-        <div>
-          <label> 면적: </label>
-          <input
-            className="w-20"
-            type="number"
-            onChange={onChangeArea}
-            value={area}
-          />{" "}
-          <label>m^2</label>
-        </div>
+        <label> 면적: </label>
+        <input
+          className="w-20"
+          type="number"
+          onChange={onChangeArea}
+          value={area}
+        />
+        <label>m^2</label>
       </div>
       {tradeType === TradeEnum.DEALING ? (
-        <div className="text-center mt-5">
-          <p>매매가</p>
+        <div className="">
+          <label> 매매가: </label>
           <input
             className="w-20"
             type="number"
@@ -227,6 +245,8 @@ function HouseOfferingDetail() {
           </div>
         </>
       )}
+      <label>상세 설명: </label>
+      <input onChange={onChangeDiscription} value={discription} />
       <Footer />
     </div>
   );

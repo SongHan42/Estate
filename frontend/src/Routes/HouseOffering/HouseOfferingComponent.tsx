@@ -1,5 +1,5 @@
 import React from "react";
-import { HouseOfferingType } from "./HouseOffering";
+import { HouseOfferingType } from "./HouseOfferingList";
 import { HouseEnum, TradeEnum } from "../House/HouseList";
 import { customAxios } from "../../function/customAxios";
 import { Link } from "react-router-dom";

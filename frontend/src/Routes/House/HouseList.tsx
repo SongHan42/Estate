@@ -53,18 +53,24 @@ function HouseList() {
 
   return (
     <div className="w-full">
-      <h2 className="text-2xl w-full text-center mb-6">
-        나의 매물 평가 리스트
-      </h2>
-      {houses.map((house) => {
-        return (
-          <HouseComponent key={house.id} house={house} setHouses={setHouses} />
-        );
-      })}
-      <Link to="/house/0">
-        <img className="w-5 mt-5" src="img/plus.png" alt="plus" />
-      </Link>
-      <Footer />
+      <div className="flex flex-col w-full items-center justify-center pb-10">
+        <h2 className="text-2xl w-full text-center mb-6">
+          나의 매물 평가 리스트
+        </h2>
+        {houses.map((house) => {
+          return (
+            <HouseComponent
+              key={house.id}
+              house={house}
+              setHouses={setHouses}
+            />
+          );
+        })}
+        <Link to="/house/0">
+          <img className="w-5 my-5" src="img/plus.png" alt="plus" />
+        </Link>
+        <Footer />
+      </div>
     </div>
   );
 }

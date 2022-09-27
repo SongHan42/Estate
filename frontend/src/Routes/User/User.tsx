@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import InputComponent from "../SignUp/InputComponent";
-import Button from "../../Components/Button";
 import InputPassword from "../SignUp/InputPassword";
 import { customAxios } from "../../function/customAxios";
+import PinkButton from "../../Components/PinkButton";
+import Footer from "../../Components/Footer";
 
 export enum Check {
   START,
@@ -94,6 +95,8 @@ function User() {
   };
   return (
     <div>
+      <PinkButton text={"수정완료"} onClick={onClickUpdateUser} />
+
       <h1 className="text-3xl mb-5">회원정보 수정</h1>
       <InputComponent
         text="닉네임"
@@ -106,7 +109,7 @@ function User() {
       <InputPassword text={"비밀번호"} onChange={onChangeNewPassword} />
       <InputPassword text={"비밀번호 확인"} onChange={onChangeCheckPassword} />
       <p className="w-full text-left text-rose-500">{passowrdCheckText()}</p>
-      <Button text={"수정완료"} onClick={onClickUpdateUser} />
+      <Footer />
     </div>
   );
 }

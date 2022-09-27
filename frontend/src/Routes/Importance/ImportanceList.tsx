@@ -3,6 +3,7 @@ import ImportanceComponent from "./ImportanceComponent";
 import { useNavigate } from "react-router-dom";
 import { customAxios } from "../../function/customAxios";
 import Footer from "../../Components/Footer";
+import PinkButton from "../../Components/PinkButton";
 
 export enum RatingEnum {
   high,
@@ -53,20 +54,11 @@ function ImportanceList() {
       .then(() => {
         navigate("/house");
       });
-
-    // axios
-    //   .patch(
-    //     process.env.REACT_APP_API_URL + "importance",
-    //     { importances: importances },
-    //     getConfig(),
-    //   )
-    //   .then(() => {
-    //     navigate("/house");
-    //   });
   };
 
   return (
     <div>
+      <PinkButton onClick={onClick} text="저장"></PinkButton>
       <div className="flex flex-col w-full items-center justify-center pb-10">
         <h1 className="text-3xl">체크리스트 및 중요도 설정</h1>
         {importances
@@ -83,7 +75,7 @@ function ImportanceList() {
             })
           : null}
         <button onClick={onAddClick}>
-          <img className="w-5 mt-5" src="img/plus.png" alt="plus" />
+          <img className="w-5 my-5" src="img/plus.png" alt="plus" />
         </button>
       </div>
       <Footer />
