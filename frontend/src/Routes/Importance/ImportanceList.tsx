@@ -75,7 +75,7 @@ function ImportanceList() {
             })
           : null}
         <button onClick={onAddClick}>
-          <img className="w-5 mt-5" src="img/plus.png" alt="plus" />
+          <img className="w-5 my-5" src="img/plus.png" alt="plus" />
         </button>
       </div>
       <Footer />

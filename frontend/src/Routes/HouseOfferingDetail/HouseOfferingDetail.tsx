@@ -146,7 +146,7 @@ function HouseOfferingDetail() {
         제목:
         <input className="ml-4" onChange={onChangeTitle} value={title} />
       </div>
-      <div className="flex justify-between mt-5">
+      <div className="justify-between mt-5">
         주소:
         <input
           className="user_enroll_text"
@@ -160,12 +160,14 @@ function HouseOfferingDetail() {
         {popup && (
           <Post company={enroll_company} setcompany={setEnroll_company} />
         )}
-        상세주소:
-        <input
-          type="text"
-          onChange={onChangeAddressDetail}
-          value={addressDetail}
-        />
+        <div>
+          상세주소:
+          <input
+            type="text"
+            onChange={onChangeAddressDetail}
+            value={addressDetail}
+          />
+        </div>
         <div>
           <label>거래 형식: </label>
           <select onChange={onChangeTradeType} value={tradeType}>
@@ -190,20 +192,18 @@ function HouseOfferingDetail() {
             )}
           </select>
         </div>
-        <div>
-          <label> 면적: </label>
-          <input
-            className="w-20"
-            type="number"
-            onChange={onChangeArea}
-            value={area}
-          />{" "}
-          <label>m^2</label>
-        </div>
+        <label> 면적: </label>
+        <input
+          className="w-20"
+          type="number"
+          onChange={onChangeArea}
+          value={area}
+        />
+        <label>m^2</label>
       </div>
       {tradeType === TradeEnum.DEALING ? (
-        <div className="text-center mt-5">
-          <p>매매가</p>
+        <div className="mt-5">
+          <label> 매매가: </label>
           <input
             className="w-20"
             type="number"
