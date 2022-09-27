@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { House } from "./house.entity";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { HouseListDto } from "./dto/house-list.dto";
 import { User } from "src/user/user.entity";
@@ -17,6 +17,8 @@ import { CreateOfferingHouseDto } from "./dto/create-offering-house.dto";
 import { OfferingHouseDetailDto } from "./dto/offering-house-detail.dto";
 import { UpdateOfferingDto } from "./dto/update-offering.dto";
 import { join } from "path";
+import { HouseDetailDto } from "./dto/house-detail.dto";
+import { SearchHouseDto } from "./dto/search-house.dto";
 
 @Injectable()
 export class HouseService {
@@ -57,7 +59,7 @@ export class HouseService {
   async postUserHouse(
     id: number,
     houseDto: HouseDto,
-    filenae: string,
+    filename: string,
   ): Promise<void> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
@@ -77,7 +79,7 @@ export class HouseService {
       address: houseDto.address,
       floor: houseDto.floor,
       roomNum: houseDto.roomNum,
-      img: filenae,
+      img: filename,
       user,
     });
     await house.save();
@@ -90,15 +92,22 @@ export class HouseService {
     );
   }
 
-  async getDetailUserHouse(id: number, houseId: number): Promise<House> {
-    const user: User = await this.userRepository.findOneById(id);
+  async getDetailUserHouse(
+    id: number,
+    houseId: number,
+  ): Promise<HouseDetailDto> {
+    const user: User = await this.userRepository.findOne({ where: { id } });
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
     const house: House = await this.houseRepository.findOne({
       where: { id: houseId },
-      relations: ["grade"],
+      relations: ["evaluation", "evaluation.grade"],
     });
     if (!house) throw new NotFoundException(`집을 찾을 수 없음`);
-    return house;
+    const houseDetailDto: HouseDetailDto = new HouseDetailDto(
+      house,
+      house.evaluation[0].grade,
+    );
+    return houseDetailDto;
   }
 
   async editUserHouse(
@@ -255,6 +264,19 @@ export class HouseService {
     await house.remove();
   }
   ////////////////
+
+  async searchHouse(id: number, address: string): Promise<SearchHouseDto[]> {
+    const houses: House[] = await this.houseRepository.find({
+      where: { address: Like(`%${address}%`), isOffering: true },
+      //      relations: ["likeHouse"],
+    });
+
+    const searchHouseDto: SearchHouseDto[] = [];
+    houses.forEach((house) => {
+      searchHouseDto.push(house);
+    });
+    return searchHouseDto;
+  }
 
   async updateBookmark(id: number, houseId: number) {
     await this.evaluationService.updateBookmark(id, houseId);

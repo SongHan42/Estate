@@ -22,7 +22,7 @@ export class House extends BaseEntity {
   @Column({ default: false })
   isOffering: boolean;
 
-  @Column()
+  @Column({ default: "" })
   address: string;
 
   detailedAddress: string;

@@ -20,6 +20,9 @@ import { CreateOfferingHouseDto } from "./dto/create-offering-house.dto";
 import { UpdateOfferingDto } from "./dto/update-offering.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
+import { HouseDetailDto } from "./dto/house-detail.dto";
+import { SearchHouseDto } from "./dto/search-house.dto";
+import { identity } from "rxjs";
 
 const storage = diskStorage({
   destination: "./img",
@@ -81,7 +84,7 @@ export class HouseController {
   getDetailUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
-  ): Promise<House> {
+  ): Promise<HouseDetailDto> {
     return this.houseService.getDetailUserHouse(id, houseId);
   }
 
@@ -89,10 +92,13 @@ export class HouseController {
   @UseInterceptors(FileInterceptor("img", { storage }))
   postUserHouse(
     @GetUserId() id: number,
-    @Body() houseDto: HouseDto,
+    @Body("data") data,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<void> {
-    return this.houseService.postUserHouse(id, houseDto, file.filename);
+    const houseDto: HouseDto = JSON.parse(data);
+    if (file)
+      return this.houseService.postUserHouse(id, houseDto, file.filename);
+    else return this.houseService.postUserHouse(id, houseDto, "");
   }
 
   @Patch("/:houseId")
@@ -100,15 +106,18 @@ export class HouseController {
   editUserHouse(
     @GetUserId() id: number,
     @Param("houseId", ParseIntPipe) houseId: number,
-    @Body() houseDto: HouseDto,
+    @Body("data") data,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<void> {
-    return this.houseService.editUserHouse(
-      id,
-      houseId,
-      houseDto,
-      file.filename,
-    );
+    const houseDto: HouseDto = JSON.parse(data);
+    if (file)
+      return this.houseService.editUserHouse(
+        id,
+        houseId,
+        houseDto,
+        file.filename,
+      );
+    else return this.houseService.editUserHouse(id, houseId, houseDto, "");
   }
 
   @Delete("/:houseId")
@@ -117,6 +126,14 @@ export class HouseController {
     @Param("houseId", ParseIntPipe) houseId: number,
   ): Promise<void> {
     return this.houseService.deleteUserHouse(id, houseId);
+  }
+
+  @Get("/search/:address")
+  searchHouse(
+    @GetUserId() id: number,
+    @Param("address") address: string,
+  ): Promise<SearchHouseDto[]> {
+    return this.houseService.searchHouse(id, address);
   }
 
   @Patch("/bookmark/:houseId")
