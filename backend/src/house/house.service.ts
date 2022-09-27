@@ -194,7 +194,9 @@ export class HouseService {
     createOfferingHouseDto: CreateOfferingHouseDto,
     filename: string,
   ) {
+    const user: User = await this.userRepository.findOne({ where: { id } });
     const house: House = this.houseRepository.create({
+      title: createOfferingHouseDto.title,
       houseType: createOfferingHouseDto.houseType,
       tradeType: createOfferingHouseDto.tradeType,
       area: createOfferingHouseDto.area,
@@ -207,6 +209,8 @@ export class HouseService {
       roomNum: createOfferingHouseDto.roomNum,
       description: createOfferingHouseDto.description,
       img: filename,
+      isOffering: true,
+      user,
     });
     await house.save();
   }
