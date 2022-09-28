@@ -6,6 +6,7 @@ import { customAxios } from "../../function/customAxios";
 import PinkButton from "../../Components/PinkButton";
 import Footer from "../../Components/Footer";
 import ImgButton from "../../Components/ImgButton";
+import Post from "../HouseOfferingDetail/PostComponent";
 
 export type GradeType = {
   id: number;
@@ -33,6 +34,25 @@ function HouseDetail() {
   const [memo, setMemo] = useState("");
   const navigate = useNavigate();
 
+  const [address, setAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
+
+  const [popup, setPopup] = useState<boolean>(false);
+  const [enroll_company, setEnroll_company] = useState({
+    address: "",
+  });
+
+  const handleInput = (e) => {
+    setEnroll_company({
+      ...enroll_company,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleComplete = () => {
+    setPopup(!popup);
+  };
+
   useEffect(() => {
     if (id === "0") {
       // first
@@ -51,11 +71,17 @@ function HouseDetail() {
         setTradeType(res.data.type);
         setGrades(res.data.grade);
         setMemo(res.data.memo);
+        setAddressDetail(res.data.addressDetail);
+        setAddress(res.data.address);
         if (res.data.img)
           setImgUrl(process.env.REACT_APP_API_URL + res.data.img);
       });
     }
   }, []);
+
+  useEffect(() => {
+    setAddress(enroll_company.address);
+  }, [enroll_company]);
 
   const onChangeTradeType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTradeType(+e.target.value);
@@ -91,6 +117,10 @@ function HouseDetail() {
 
   const onChangeMemo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemo(e.target.value);
+  };
+
+  const onChangeAddressDetail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressDetail(e.target.value);
   };
 
   const onClick = () => {
@@ -149,11 +179,32 @@ function HouseDetail() {
             setImgFile={setImgFile}
             setImgUrl={setImgUrl}
           />
-          제목:
-          <input className="ml-4" onChange={onChangeTitle} value={title} />
         </div>
-        <div className="flex justify-between mt-5">
+        제목:
+        <input className="ml-4" onChange={onChangeTitle} value={title} />
+        <div className="mt-5">
+          주소:
+          <input
+            className="user_enroll_text"
+            type="text"
+            required={true}
+            name="address"
+            onChange={handleInput}
+            value={address}
+            onClick={handleComplete}
+          />
+          {popup && (
+            <Post company={enroll_company} setcompany={setEnroll_company} />
+          )}
           <div>
+            <div>
+              상세주소:
+              <input
+                type="text"
+                onChange={onChangeAddressDetail}
+                value={addressDetail}
+              />
+            </div>
             <label>거래 형식: </label>
             <select onChange={onChangeTradeType} value={tradeType}>
               {["매매", "전세", "월세"].map((tradetype, index) => {
@@ -189,7 +240,7 @@ function HouseDetail() {
           </div>
         </div>
         {tradeType === TradeEnum.DEALING ? (
-          <div className="text-center mt-5">
+          <div className="mb-5">
             <p>매매가</p>
             <input
               className="w-20"
