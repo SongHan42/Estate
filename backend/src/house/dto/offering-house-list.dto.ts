@@ -4,6 +4,7 @@ import { House } from "../house.entity";
 
 export class OfferingHouseListDto {
   constructor(house: House) {
+    this.id = house.id;
     this.title = house.title;
     this.houseType = house.houseType;
     this.tradeType = house.tradeType;
@@ -12,7 +13,9 @@ export class OfferingHouseListDto {
     this.deposit = house.deposit;
     this.rent = house.rent;
     this.maintenanceFee = house.maintenanceFee;
+    this.img = house.img;
   }
+  id: number;
   title: string;
   houseType: HouseType;
   tradeType: TradeType;
@@ -21,5 +24,6 @@ export class OfferingHouseListDto {
   deposit: number;
   rent: number;
   maintenanceFee: number;
+  img: string;
   //   grade: GradeDto[];
 }
