@@ -43,19 +43,22 @@ function HouseOfferingDetail() {
 
   useEffect(() => {
     // update
-    customAxios.get(`house/offering/${id}`).then((res) => {
-      setTitle(res.data.title);
-      setDeposit(res.data.deposit);
-      setMaintenanceFee(res.data.maintenanceFee);
-      setRent(res.data.rent);
-      setArea(res.data.area);
-      setPrice(res.data.price);
-      setTradeType(res.data.type);
-      setDiscription(res.data.discription);
-      setAddressDetail(res.data.addressDetail);
-      setAddress(res.data.address);
-      if (res.data.img) setImgUrl(process.env.REACT_APP_API_URL + res.data.img);
-    });
+    if (id !== "0") {
+      customAxios.get(`house/offering/${id}`).then((res) => {
+        setTitle(res.data.title);
+        setDeposit(res.data.deposit);
+        setMaintenanceFee(res.data.maintenanceFee);
+        setRent(res.data.rent);
+        setArea(res.data.area);
+        setPrice(res.data.price);
+        setTradeType(res.data.type);
+        setDiscription(res.data.discription);
+        setAddressDetail(res.data.addressDetail);
+        setAddress(res.data.address);
+        if (res.data.img)
+          setImgUrl(process.env.REACT_APP_API_URL + res.data.img);
+      });
+    }
   }, []);
 
   useEffect(() => {
