@@ -23,6 +23,7 @@ import { diskStorage } from "multer";
 import { HouseDetailDto } from "./dto/house-detail.dto";
 import { SearchHouseDto } from "./dto/search-house.dto";
 import { identity } from "rxjs";
+import { OfferingHouseDetailDto } from "./dto/offering-house-detail.dto";
 
 const storage = diskStorage({
   destination: "./img",
@@ -66,18 +67,23 @@ export class HouseController {
   }
 
   @Get("/offering/:houseId")
-  getOfferingDetail(@Param("houseId") id: number) {
-    this.houseService.getOfferingDetail(id);
+  getOfferingDetail(
+    @Param("houseId") id: number,
+  ): Promise<OfferingHouseDetailDto> {
+    return this.houseService.getOfferingDetail(id);
   }
 
   @Patch("/offering/:houseId")
   @UseInterceptors(FileInterceptor("img", { storage }))
   updateOffering(
     @Param("houseId") id,
+    @Body()
     updateOfferingDto: UpdateOfferingDto,
     @UploadedFile() file: Express.Multer.File,
   ): void {
-    this.houseService.updateOffering(id, updateOfferingDto, file.filename);
+    if (file)
+      this.houseService.updateOffering(id, updateOfferingDto, file.filename);
+    else this.houseService.updateOffering(id, updateOfferingDto, "");
   }
 
   @Delete("/offering/:houseId")

@@ -13,6 +13,7 @@ export class HouseDetailDto {
     this.rent = house.rent;
     this.maintenanceFee = house.maintenanceFee;
     this.address = house.address;
+    this.detailedAddress = house.detailedAddress;
     this.floor = house.floor;
     this.img = house.img;
     this.memo = house.evaluation[0].memo;
@@ -27,6 +28,7 @@ export class HouseDetailDto {
   rent: number;
   maintenanceFee: number;
   address: string;
+  detailedAddress: string;
   floor: number;
   roomNum: number;
   img: string;

@@ -10,6 +10,7 @@ export class UpdateOfferingDto {
   rent: number;
   maintenanceFee: number;
   address: string;
+  detailedAddress: string;
   floor: number;
   roomNum: number;
   description: string;

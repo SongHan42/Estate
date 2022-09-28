@@ -14,6 +14,7 @@ export class SearchHouseDto {
     this.maintenanceFee = house.maintenanceFee;
     this.description = house.description;
     this.address = house.address;
+    this.detailedAddress = house.detailedAddress;
     this.floor = house.floor;
     this.roomNum = house.roomNum;
     this.img = house.img;
@@ -29,6 +30,7 @@ export class SearchHouseDto {
   maintenanceFee: number;
   description: string;
   address: string;
+  detailedAddress: string;
   floor: number;
   roomNum: number;
   img: string;

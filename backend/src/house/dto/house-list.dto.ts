@@ -16,6 +16,7 @@ export class HouseListDto {
     this.maintenanceFee = house.maintenanceFee;
     this.isBookmark = isBookmark;
     this.address = house.address;
+    this.detailedAddress = house.detailedAddress;
     this.floor = house.floor;
     this.roomNum = house.roomNum;
     this.img = house.img;
@@ -57,6 +58,7 @@ export class HouseListDto {
   middleAvg = 0;
   lowAvg = 0;
   address: string;
+  detailedAddress: string;
   floor: number;
   roomNum: number;
   img: string;

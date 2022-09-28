@@ -25,6 +25,7 @@ export class House extends BaseEntity {
   @Column({ default: "" })
   address: string;
 
+  @Column({ default: "" })
   detailedAddress: string;
 
   @Column()

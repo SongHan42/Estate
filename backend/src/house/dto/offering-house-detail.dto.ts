@@ -11,6 +11,9 @@ export class OfferingHouseDetailDto {
     this.deposit = house.deposit;
     this.rent = house.rent;
     this.maintenanceFee = house.maintenanceFee;
+    this.address = house.address;
+    this.detailedAddress = house.detailedAddress;
+    this.img = house.img;
     evaluations.forEach((evaluation) => {
       this.evaluation.push(new EvaluationDto(evaluation));
     });
@@ -22,5 +25,8 @@ export class OfferingHouseDetailDto {
   deposit: number;
   rent: number;
   maintenanceFee: number;
-  evaluation: EvaluationDto[];
+  address: string;
+  detailedAddress: string;
+  img: string;
+  evaluation: EvaluationDto[] = [];
 }
