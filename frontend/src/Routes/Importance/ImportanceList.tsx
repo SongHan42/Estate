@@ -48,7 +48,7 @@ function ImportanceList() {
       // );
     });
     customAxios
-      .patch(process.env.REACT_APP_API_URL + "importance", {
+      .patch("importance", {
         importances: importances,
       })
       .then(() => {

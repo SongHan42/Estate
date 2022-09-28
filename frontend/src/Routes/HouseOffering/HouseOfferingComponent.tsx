@@ -39,7 +39,7 @@ function HouseOfferingComponent({
   return (
     <div className="flex justify-between mb-3">
       <div className="bg-white rounded-lg">
-        <Link to={"/house/offering" + houseOffering.id}>
+        <Link to={"/house/offering/" + houseOffering.id}>
           <div className="flex w-full">
             <div>
               {houseOffering.tradeType === TradeEnum.DEALING ? (
@@ -54,7 +54,9 @@ function HouseOfferingComponent({
                   {houseOffering.maintenanceFee} 만원{" "}
                 </p>
               )}
-              <p className="px-3 text-base">{houseOffering.discription}</p>
+              <p className="px-3 text-base">
+                {houseOffering.address} {houseOffering.addressDetail}
+              </p>
 
               <p className="px-3 text-base">
                 {housetypeText()}•{houseOffering.area}•방{" "}
