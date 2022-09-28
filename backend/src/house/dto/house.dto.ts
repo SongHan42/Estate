@@ -11,6 +11,7 @@ export class HouseDto {
   rent: number;
   maintenanceFee: number;
   address: string;
+  detailedAddress: string;
   floor: number;
   roomNum: number;
   memo: string;
