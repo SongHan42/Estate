@@ -23,7 +23,7 @@ export type HouseOfferingType = {
 };
 
 function HouseOfferingList() {
-  const [houseOfferings, setHouseOfferings] = useState<HouseOfferingType[]>();
+  const [houseOfferings, setHouseOfferings] = useState<HouseOfferingType[]>([]);
 
   useEffect(() => {
     customAxios.get("house/offering").then((res) => {
@@ -34,17 +34,15 @@ function HouseOfferingList() {
   return (
     <div className="w-full">
       <h2 className="text-2xl w-full text-center mb-6">내놓은 방</h2>
-      {houseOfferings
-        ? houseOfferings.map((houseOffering) => {
-            return (
-              <HouseOfferingComponent
-                key={houseOffering.id}
-                houseOffering={houseOffering}
-                setHouseOfferings={setHouseOfferings}
-              />
-            );
-          })
-        : null}
+      {houseOfferings.map((houseOffering) => {
+        return (
+          <HouseOfferingComponent
+            key={houseOffering.id}
+            houseOffering={houseOffering}
+            setHouseOfferings={setHouseOfferings}
+          />
+        );
+      })}
       <Footer />
     </div>
   );

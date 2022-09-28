@@ -35,6 +35,7 @@ function App() {
             ></Route>
             <Route path="/like" element={<LikeList />}></Route>
             <Route path="/house/search" element={<Search />}></Route>
+            <Route path="/house/search/:address" element={<Search />}></Route>
           </Routes>
         </div>
       </div>

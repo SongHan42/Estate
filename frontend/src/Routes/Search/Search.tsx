@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../../Components/Footer";
 import { customAxios } from "../../function/customAxios";
-import HouseOfferingComponent from "../HouseOffering/HouseOfferingComponent";
 import { HouseOfferingType } from "../HouseOffering/HouseOfferingList";
 
 function Search() {
-  const [houseOfferings, setHouseOfferings] = useState<HouseOfferingType[]>();
+  const [houseOfferings, setHouseOfferings] = useState<HouseOfferingType[]>([]);
   const [address, setAddress] = useState("");
 
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,7 +16,6 @@ function Search() {
       customAxios.get(`/house/search/${address}`).then((res) => {
         setHouseOfferings(res.data);
       });
-      console.log(houseOfferings);
     }
   };
 
@@ -38,17 +36,9 @@ function Search() {
           onKeyPress={onEnter}
         />
       </div>
-      {houseOfferings
-        ? houseOfferings.map((houseOffering) => {
-            return (
-              <HouseOfferingComponent
-                key={houseOffering.id}
-                houseOffering={houseOffering}
-                setHouseOfferings={setHouseOfferings}
-              />
-            );
-          })
-        : null}
+      {houseOfferings.map((houseOffering) => {
+        return <p key={houseOffering.id}>{houseOffering.address}</p>; //임시
+      })}
       <Footer />
     </div>
   );

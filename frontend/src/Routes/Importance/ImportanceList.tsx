@@ -18,7 +18,7 @@ export type ImportanceType = {
 };
 
 function ImportanceList() {
-  const [importances, setImportances] = useState<ImportanceType[]>();
+  const [importances, setImportances] = useState<ImportanceType[]>([]);
   const [deleteImportanceIds, setDeleteImportanceIds] = useState<number[]>([]);
   const navigate = useNavigate();
 
@@ -61,19 +61,17 @@ function ImportanceList() {
       <PinkButton onClick={onClick} text="저장"></PinkButton>
       <div className="flex flex-col w-full items-center justify-center pb-10">
         <h1 className="text-3xl">체크리스트 및 중요도 설정</h1>
-        {importances
-          ? importances.map((importance, index) => {
-              return (
-                <ImportanceComponent
-                  key={index}
-                  importance={importance}
-                  index={index}
-                  setImportances={setImportances}
-                  setDeleteImportanceIds={setDeleteImportanceIds}
-                />
-              );
-            })
-          : null}
+        {importances.map((importance, index) => {
+          return (
+            <ImportanceComponent
+              key={index}
+              importance={importance}
+              index={index}
+              setImportances={setImportances}
+              setDeleteImportanceIds={setDeleteImportanceIds}
+            />
+          );
+        })}
         <button onClick={onAddClick}>
           <img className="w-5 my-5" src="img/plus.png" alt="plus" />
         </button>
