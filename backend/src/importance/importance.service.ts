@@ -18,9 +18,14 @@ export class ImportanceService {
   async getUserImportance(id: number): Promise<Importance[]> {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
-    const importance: Importance[] = await this.importanceRepository.findBy({
-      user: {
-        id: user.id,
+    const importance: Importance[] = await this.importanceRepository.find({
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+      order: {
+        title: 1,
       },
     });
     return importance;
@@ -30,7 +35,7 @@ export class ImportanceService {
     const user: User = await this.userRepository.findOneById(id);
     if (!user) throw new NotFoundException(`유저를 찾을 수 없음`);
 
-    let titles: string[] = [
+    const titles: string[] = [
       "건물 대출/융자",
       "전입신고 가능 여부/날짜",
       "계약기간",
