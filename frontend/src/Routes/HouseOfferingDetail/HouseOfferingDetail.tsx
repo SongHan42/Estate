@@ -39,7 +39,7 @@ function HouseOfferingDetail() {
 
   useEffect(() => {
     // update
-    customAxios.get(`house/${id}`).then((res) => {
+    customAxios.get(`house/offering/${id}`).then((res) => {
       setTitle(res.data.title);
       setDeposit(res.data.deposit);
       setMaintenanceFee(res.data.maintenanceFee);

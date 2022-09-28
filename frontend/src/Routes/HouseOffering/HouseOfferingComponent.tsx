@@ -39,7 +39,7 @@ function HouseOfferingComponent({
   return (
     <div className="flex justify-between mb-3">
       <div className="bg-white rounded-lg">
-        <Link to={"/house/offering" + houseOffering.id}>
+        <Link to={"/house/offering/" + houseOffering.id}>
           <div className="flex w-full">
             <div>
               {houseOffering.tradeType === TradeEnum.DEALING ? (

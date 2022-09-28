@@ -26,7 +26,7 @@ function Search() {
       setHouseOfferings(res.data);
     });
   }, []);
-  console.log("asdf", houseOfferings);
+
   return (
     <div className="flex flex-col w-full items-center pb-10">
       <div className="flex justify-between">
