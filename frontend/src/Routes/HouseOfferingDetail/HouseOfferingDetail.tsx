@@ -23,7 +23,6 @@ function HouseOfferingDetail() {
   const [enroll_company, setEnroll_company] = useState({
     address: "",
   });
-
   const navigate = useNavigate();
 
   const handleInput = (e) => {
@@ -116,6 +115,7 @@ function HouseOfferingDetail() {
           houseType,
         })
         .then(() => {
+          alert("매물 등록 완료");
           navigate("/house/offering");
         });
     } else {
@@ -134,6 +134,7 @@ function HouseOfferingDetail() {
           houseType,
         })
         .then(() => {
+          alert("매물 수정 완료");
           navigate("/house/offering");
         });
     }
@@ -154,7 +155,7 @@ function HouseOfferingDetail() {
           required={true}
           name="address"
           onChange={handleInput}
-          value={enroll_company.address}
+          value={address}
           onClick={handleComplete}
         />
         {popup && (
