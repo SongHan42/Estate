@@ -77,7 +77,7 @@ function HouseOfferingComponent({
         </Link>
       </div>
       <button onClick={onClick}>
-        <img className="w-10 ml-3" src="/img/minus.png" alt="" />
+        <img className="w-5 ml-3" src="/img/minus.png" alt="" />
       </button>
     </div>
   );
