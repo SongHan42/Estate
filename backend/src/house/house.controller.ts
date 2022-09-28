@@ -51,10 +51,10 @@ export class HouseController {
   @UseInterceptors(FileInterceptor("img", { storage }))
   createOfferingHouse(
     @GetUserId() id: number,
-    @Body()
-    createOfferingHouseDto: CreateOfferingHouseDto,
+    @Body("data") data,
     @UploadedFile() file: Express.Multer.File,
   ) {
+    const createOfferingHouseDto: CreateOfferingHouseDto = JSON.parse(data);
     if (file) {
       this.houseService.createOfferingHouse(
         id,
@@ -77,10 +77,10 @@ export class HouseController {
   @UseInterceptors(FileInterceptor("img", { storage }))
   updateOffering(
     @Param("houseId") id,
-    @Body()
-    updateOfferingDto: UpdateOfferingDto,
+    @Body("data") data,
     @UploadedFile() file: Express.Multer.File,
   ): void {
+    const updateOfferingDto: UpdateOfferingDto = JSON.parse(data);
     if (file)
       this.houseService.updateOffering(id, updateOfferingDto, file.filename);
     else this.houseService.updateOffering(id, updateOfferingDto, "");
