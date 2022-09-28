@@ -83,7 +83,7 @@ function HouseComponent({ house, setHouses }: PropsType) {
               </p>
             </div>
             <img
-              className="w-1/3 m-3 right-0"
+              className="w-28 m-3 right-0"
               src={
                 house.img
                   ? process.env.REACT_APP_API_URL + house.img
@@ -95,7 +95,7 @@ function HouseComponent({ house, setHouses }: PropsType) {
         </Link>
       </div>
       <button onClick={onClick}>
-        <img className="w-5" src="img/minus.png" alt="" />
+        <img className="w-5 " src="img/minus.png" alt="" />
       </button>
     </div>
   );

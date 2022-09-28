@@ -65,7 +65,7 @@ function HouseOfferingComponent({
               <p className="px-3 text-base">{houseOffering.discription}</p>
             </div>
             <img
-              className="w-1/3 m-3 right-0"
+              className="w-28 m-3 right-0"
               src={
                 houseOffering.img
                   ? process.env.REACT_APP_API_URL + houseOffering.img
