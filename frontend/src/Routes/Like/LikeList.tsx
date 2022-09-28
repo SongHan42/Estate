@@ -25,7 +25,7 @@ function LikeList() {
   const [houseOfferings, setHouseOfferings] = useState<HouseOfferingType[]>([]);
 
   useEffect(() => {
-    customAxios.get("house/offering").then((res) => {
+    customAxios.get("like-house").then((res) => {
       setHouseOfferings(res.data);
     });
   }, []);
