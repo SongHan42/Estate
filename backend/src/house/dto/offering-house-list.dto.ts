@@ -13,6 +13,7 @@ export class OfferingHouseListDto {
     this.deposit = house.deposit;
     this.rent = house.rent;
     this.maintenanceFee = house.maintenanceFee;
+    this.img = house.img;
   }
   id: number;
   title: string;
@@ -23,5 +24,6 @@ export class OfferingHouseListDto {
   deposit: number;
   rent: number;
   maintenanceFee: number;
+  img: string;
   //   grade: GradeDto[];
 }
